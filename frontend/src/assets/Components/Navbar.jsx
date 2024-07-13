@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import logo from '../Images/Logo.png'
+import React from 'react';
+import logo from '../Images/Logo.png';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -8,13 +8,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
-
 const Navbar1 = () => {
-
     return (
         <>
-            <Navbar expand="lg" className="bg-body-tertiary">
-                <Container fluid>
+            <Navbar expand="lg" className="bg-body-tertiary navContainer">
+                <Container fluid className=''>
                     <Navbar.Brand href="#">REAL ESTATE</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
@@ -23,31 +21,24 @@ const Navbar1 = () => {
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
-                            <Link to='/'>
-                                <Nav.Link href="#action1">Home</Nav.Link>
-                            </Link>
-
-                            <Link to='/about'>
-                                <Nav.Link href="#action2">About</Nav.Link></Link>
-
-                            <Link to='signIn'>
-                                <Nav.Link href="#action2">SignIn</Nav.Link></Link>
-
+                            <Nav.Link as={Link} to="/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/about">About</Nav.Link>
+                            <Nav.Link as={Link} to="/signIn">SignIn</Nav.Link>
                         </Nav>
                         <Form className="d-flex">
                             <Form.Control
                                 type="search"
                                 placeholder="Search"
-                                className="me-2"
+                                className="me-2 search"
                                 aria-label="Search"
                             />
-                            <Button variant="outline-success">Search</Button>
+                            <Button variant="secondary">Search</Button>
                         </Form>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
         </>
-    )
+    );
 }
 
-export default Navbar1
+export default Navbar1;

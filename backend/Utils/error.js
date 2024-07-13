@@ -1,4 +1,4 @@
-exports.customError = (statusCode , message) =>{
+const customError = (statusCode , message) =>{
     const error = new Error;
 
     error.statusCode = statusCode;
@@ -6,3 +6,5 @@ exports.customError = (statusCode , message) =>{
 
     return error;
 }
+
+module.exports = customError;

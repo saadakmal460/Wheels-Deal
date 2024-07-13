@@ -68,7 +68,7 @@ const SignUp = () => {
         <div className='flex gap-2'>
           <p>Have an account? </p>
           <Link to={"/signIn"}>
-            <span className='text-blue-700'>Sign In</span>
+            <span className='text-blue-700 hover:underline'>Sign In</span>
           </Link>
 
         </div>
