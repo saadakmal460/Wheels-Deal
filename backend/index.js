@@ -9,11 +9,14 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
+app.use(Logger);
+
 
 
 app.use('/api' , router);
-app.use(cors());
-app.use(Logger);
+
+
 
 mongoose
 .connect(process.env.MONGO)

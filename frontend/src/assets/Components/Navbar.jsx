@@ -1,17 +1,31 @@
-import React from 'react';
-import logo from '../Images/Logo.png';
+import React, { useEffect  , useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const Navbar1 = () => {
 
-    const {currentUser} = useSelector((state) => state.user)
+    const { currentUser } = useSelector((state) => state.user);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const resolveUser = async () => {
+            if (currentUser && currentUser instanceof Promise) {
+                const result = await currentUser;
+                
+                setUser(result);
+            } else {
+                setUser(currentUser);
+            }
+        };
+        resolveUser();
+    }, [currentUser]);
+
+
     return (
         <>
             <Navbar expand="lg" className="bg-body-tertiary navContainer">
@@ -27,11 +41,11 @@ const Navbar1 = () => {
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/about">About</Nav.Link>
 
-                            
+
                             <Nav.Link as={Link} to="/profile">
 
-                            {currentUser ? ( <img className='rounded-full h-7 w-7 object-cover' src='' alt=''/>) : 'SignIn'}
-                             
+                                {user ? (<img className='rounded-full h-7 w-7 object-cover' src={user.avatar} alt='' />) : 'SignIn'}
+
                             </Nav.Link>
                         </Nav>
                         <Form className="d-flex">
