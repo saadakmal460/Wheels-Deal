@@ -16,7 +16,6 @@ const Navbar1 = () => {
         const resolveUser = async () => {
             if (currentUser && currentUser instanceof Promise) {
                 const result = await currentUser;
-                
                 setUser(result);
             } else {
                 setUser(currentUser);
@@ -24,6 +23,7 @@ const Navbar1 = () => {
         };
         resolveUser();
     }, [currentUser]);
+    
 
 
     return (
