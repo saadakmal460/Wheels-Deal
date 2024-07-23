@@ -91,10 +91,7 @@ const EditProfile = () => {
 
             dispatch(updateUserSucess(data));
             setupdateSucess(true);
-            console.log('User Created');
-            console.log(data);
-
-
+            
         } catch (error) {
             dispatch(updateUserFailure(error));
 
@@ -108,8 +105,6 @@ const EditProfile = () => {
     return (
 
         <>
-
-
             <div className='p-3 max-w-lg mx-auto'>
                 <h1 className='text-3xl font-semibold my-7 text-center'>Edit Profile</h1>
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit}>

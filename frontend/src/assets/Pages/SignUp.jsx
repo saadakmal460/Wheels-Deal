@@ -40,8 +40,6 @@ const SignUp = () => {
         return;
       }
       setLoading(false);
-      console.log('User Created');
-      console.log(data);
       navigate('/signIn');
 
     } catch (error) {

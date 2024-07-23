@@ -1,22 +1,24 @@
-import React , {useState,useEffect} from 'react'
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { deleteUserStart, deleteUserSucess, deleteUserFailure } from '../../Redux/User/UserSlice';
+import { Modal, Button } from 'react-bootstrap';
 
 const Profile = () => {
-
   const { currentUser } = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
   const [user, setUser] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  
   useEffect(() => {
     const resolveUser = async () => {
       if (currentUser && currentUser instanceof Promise) {
         const result = await currentUser;
-
         setUser(result);
-        
       } else {
         setUser(currentUser);
       }
@@ -24,14 +26,43 @@ const Profile = () => {
     resolveUser();
   }, [currentUser]);
 
-  
-  const handleClick = (e)=>{
+  const handleClick = (e) => {
     e.preventDefault();
+    navigate('/editProfile');
+  };
 
-    navigate('/editProfile')
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      dispatch(deleteUserStart());
 
-  }
+      const res = await fetch(`/api/deleteUser/${user._id}`, {
+        method: 'DELETE',
+      });
 
+      if (!res.ok) {
+        const errorData = await res.json();
+        dispatch(deleteUserFailure(errorData.error));
+        return;
+      }
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.error));
+        return;
+      }
+
+      dispatch(deleteUserSucess());
+      navigate('/'); // Redirect to home page or any other page
+
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    } finally {
+      setDeleting(false);
+      setShowModal(false);
+    }
+  };
 
   return (
     <>
@@ -47,20 +78,34 @@ const Profile = () => {
             </div>
             <div className="flex gap-2 px-2">
               <button
-                onClick={handleClick}
-                className="flex-1 rounded-lg bg-blue-600 dark:bg-blue-800 text-white dark:text-white antialiased font-bold hover:bg-blue-800 dark:hover:bg-blue-900 px-4 py-2">
-                Edit Profile
-              </button>
-              <button
-                className="flex-1 rounded-lg border-2 bg-red-600 text-white px-4 py-2">
-                Delete Profile
+                onClick={() => setShowModal(true)}
+                className="flex-1 rounded-lg border-2 bg-red-600 text-white px-4 py-2"
+                disabled={loading}
+              >
+                {loading ? 'Deleting.....' : 'Delete Profile'}
               </button>
             </div>
           </div>
         </div>
       </div>
-    </>
-  )
-}
 
-export default Profile
+      {/* Modal for Confirmation */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete your profile? This action cannot be undone.</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDelete} disabled={deleting}>
+            {deleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+};
+
+export default Profile;

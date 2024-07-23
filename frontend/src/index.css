@@ -14,3 +14,22 @@ body{
 .search{
     background-color: rgb(241, 245, 241);
 }
+
+
+.navContainer {
+    position: relative;
+    z-index: 10;
+}
+
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+}
+
+@media (max-width: 575.98px) {
+    .dropdown-menu-right {
+        right: 0;
+        left: 0;
+        width: 100%;
+    }
+}

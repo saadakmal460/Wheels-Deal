@@ -26,3 +26,13 @@ exports.signIn = async (req, res, next) => {
     }
 
 }
+
+
+exports.SignOut = (req,res,next)=>{
+    try {
+        res.clearCookie('acess_token');
+        res.status(200).json('User Signed out Sucessfully')
+    } catch (error) {
+        next(error)
+    }
+}
