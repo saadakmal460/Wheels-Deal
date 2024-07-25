@@ -3,6 +3,8 @@ const {userController , UpdateUser , deleteUser} = require('../Controller/user.c
 const {signUp} = require('../Controller/signUp.controller')
 const {signIn , SignOut} = require('../Controller/signIn.controller')
 const {verifyUser} = require('../Utils/verifyUser')
+const {Create} = require('../Controller/listing.controller')
+
 
 
 
@@ -10,15 +12,19 @@ const router = express.Router();
 
 router.get('/test' , userController);
 
+
+ // AUTH ROUTES
 router.post('/signup' , signUp );
 router.post('/signIn' , signIn );
-
-
-router.post('/updateUser/:id' ,  verifyUser , UpdateUser);
-router.delete('/deleteUser/:id' ,  verifyUser , deleteUser);
 router.get('/signOut' ,   SignOut);
 
+// USER ROUTES
+router.post('/updateUser/:id' ,  verifyUser , UpdateUser);
+router.delete('/deleteUser/:id' ,  verifyUser , deleteUser);
 
+
+// LISTING ROUTES
+router.post('/lsiting/create' , verifyUser , Create);
 
 
 

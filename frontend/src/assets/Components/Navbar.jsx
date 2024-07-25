@@ -65,6 +65,9 @@ const Navbar1 = () => {
                     <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
                         <Nav.Link as={Link} to="/" className="me-3">Home</Nav.Link>
                         <Nav.Link as={Link} to="/about" className="me-3">About</Nav.Link>
+                        {user ? (
+                            <Nav.Link as={Link} to="/listing" className="me-3">Add Your Post</Nav.Link>
+                        ) : <></>}
                     </Nav>
                     {user ? (
                         <Dropdown align="end" className="ms-3">
@@ -82,9 +85,10 @@ const Navbar1 = () => {
                             <Dropdown.Menu className="dropdown-menu-right">
                                 <Dropdown.Item as={Link} to="/editProfile">Edit Profile</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/profile">Delete Profile</Dropdown.Item>
-                                <Dropdown.Item onClick={handleLogOut}>{loading ? 'Signining Out' : 'Sign Out'}</Dropdown.Item>
+                                <Dropdown.Item onClick={handleLogOut}>{loading ? 'Sign Out' : 'Signing Out'}</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
+
                     ) : (
                         <Nav style={{ maxHeight: '100px' }} navbarScroll>
                             <Nav.Link as={Link} to="/signIn" className="me-3">Sign In</Nav.Link>

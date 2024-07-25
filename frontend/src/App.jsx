@@ -8,6 +8,7 @@ import About from './assets/Pages/About'
 import Navbar1 from './assets/Components/Navbar';
 import PrivateRoute from './assets/Components/PrivateRoute';
 import EditProfile from './assets/Pages/EditProfile';
+import Listing from './assets/Pages/Listing';
 
 
 const App = () => {
@@ -20,6 +21,8 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
           <Route path='/editProfile' element={<EditProfile />} />
+          <Route path='/listing' element={<Listing />} />
+
           
         </Route>
 
