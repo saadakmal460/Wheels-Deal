@@ -26,10 +26,9 @@ body{
     left: auto;
 }
 
-@media (max-width: 575.98px) {
-    .dropdown-menu-right {
-        right: 0;
-        left: 0;
-        width: 100%;
-    }
+.dropdown-menu-right {
+    right: 0;
+    left: 0;
+    width: 100%;
 }
+

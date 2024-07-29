@@ -1,124 +1,185 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { app } from '../../firebase';
 
-const Listing = () => {
+const VehicleListing = () => {
+    const [files, setFiles] = useState([]);
+    const [imageError, setImageError] = useState(false);
+    const [formData, setFormData] = useState({
+        make: '',
+        model: '',
+        year: '',
+        mileage: '',
+        price: '',
+        description: '',
+        condition: '',
+        transmission: '',
+        fuelType: '',
+        imageUrls: []
+    });
+
+    const handleImageSubmit = (e) => {
+        e.preventDefault();
+        if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+            const promises = [];
+
+            for (let i = 0; i < files.length; i++) {
+                promises.push(storeImage(files[i]));
+            }
+
+            Promise.all(promises).then((urls) => {
+                setFormData({ ...formData, imageUrls: formData.imageUrls.concat(urls) });
+                setImageError(false);
+            }).catch((error) => {
+                setImageError('2mb MAX');
+            })
+        } else {
+            setImageError('Upload 6 images per post');
+        }
+    }
+
+    const storeImage = (file) => {
+        return new Promise((resolve, reject) => {
+            const storage = getStorage(app);
+            const fileName = new Date().getTime() + file.name;
+            const storageRef = ref(storage, fileName);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on(
+                'state_changed', (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log(Math.round(progress));
+                },
+                (error) => {
+                    reject(error);
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+                        resolve(downloadUrl);
+                    });
+                }
+            )
+        })
+    }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    }
+
     return (
-        <>
-            <section class="max-w-4xl p-6 mx-auto">
-                <h1 class="text-xl font-bold text-black capitalize">Account settings</h1>
-                <form>
-                    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-                        <div>
-                            <label class="text-black" for="username">Property Name</label>
-                            <input id="username" type="text" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
+        <main className="p-3 max-w-6xl mx-auto">
+            <h1 className="text-2xl font-bold text-black capitalize mb-4">Post Your Vehicle</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <form className="space-y-4">
+                    <div className="mb-4">
+                        <label className="block text-black mb-2" htmlFor="make">Make</label>
+                        <input name="make" id="make" type="text" value={formData.make} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                    </div>
 
-                        <div>
-                            <label class="text-black" for="emailAddress">Address</label>
-                            <input id="emailAddress" type="email" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
+                    <div className="mb-4">
+                        <label className="block text-black mb-2" htmlFor="model">Model</label>
+                        <input name="model" id="model" type="text" value={formData.model} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                    </div>
 
-                        <div>
-                            <label class="text-black" for="password">Description</label>
-                            <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Leave a comment..."></textarea>
-                        </div>
+                    <div className="mb-4">
+                        <label className="block text-black mb-2" htmlFor="year">Year</label>
+                        <input name="year" id="year" type="number" value={formData.year} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                    </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-black">
-                                Image
-                            </label>
-                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                <div class="space-y-1 text-center">
-                                    <svg class="mx-auto h-12 w-12 text-black" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    <div class="flex text-sm text-gray-600">
-                                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                            <span class="">Upload a file</span>
-                                            <input id="file-upload" name="file-upload" type="file" class="sr-only" />
-                                        </label>
-                                        <p class="pl-1 text-black">or drag and drop</p>
-                                    </div>
-                                    <p class="text-xs text-black">
-                                        PNG, JPG, GIF up to 10MB
-                                    </p>
+                    <div className="mb-4">
+                        <label className="block text-black mb-2" htmlFor="mileage">Mileage</label>
+                        <input name="mileage" id="mileage" type="number" value={formData.mileage} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-black mb-2" htmlFor="price">Price</label>
+                        <input name="price" id="price" type="number" value={formData.price} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-black mb-2" htmlFor="description">Description</label>
+                        <textarea name="description" id="description" value={formData.description} onChange={handleInputChange} rows="7" style={{ resize: 'none' }} className="block w-full p-2.5 text-sm text-black rounded-lg border border-gray-300" required></textarea>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-black mb-2">Condition</label>
+                        <div className="flex items-center space-x-2">
+                            <input id="new" type="radio" value="new" name="condition" onChange={handleInputChange} className="w-4 h-4" required />
+                            <label className="text-sm font-medium text-black" htmlFor="new">New</label>
+                            <input id="used" type="radio" value="used" name="condition" onChange={handleInputChange} className="w-4 h-4" required />
+                            <label className="text-sm font-medium text-black" htmlFor="used">Used</label>
+                        </div>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-black mb-2">Transmission</label>
+                        <div className="flex items-center space-x-2">
+                            <input id="automatic" type="radio" value="automatic" name="transmission" onChange={handleInputChange} className="w-4 h-4" required />
+                            <label className="text-sm font-medium text-black" htmlFor="automatic">Automatic</label>
+                            <input id="manual" type="radio" value="manual" name="transmission" onChange={handleInputChange} className="w-4 h-4" required />
+                            <label className="text-sm font-medium text-black" htmlFor="manual">Manual</label>
+                        </div>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-black mb-2">Fuel Type</label>
+                        <div className="flex flex-wrap gap-2">
+                            {['Petrol', 'Diesel', 'Electric', 'Hybrid', 'CNG', 'LPG', 'Hydrogen'].map((fuel, index) => (
+                                <div key={index} className="flex items-center space-x-2">
+                                    <input id={fuel.toLowerCase()} type="radio" value={fuel.toLowerCase()} name="fuelType" onChange={handleInputChange} className="w-4 h-4" required />
+                                    <label className="text-sm font-medium text-black" htmlFor={fuel.toLowerCase()}>{fuel}</label>
                                 </div>
-                            </div>
+                            ))}
                         </div>
-
-
-                        <div class="flex">
-                            <div class="flex items-center me-4">
-                                <input id="inline-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                    <label for="inline-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Inline 1</label>
-                            </div>
-                            <div class="flex items-center me-4">
-                                <input id="inline-2-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                    <label for="inline-2-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Inline 2</label>
-                            </div>
-                            <div class="flex items-center me-4">
-                                <input checked id="inline-checked-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                    <label for="inline-checked-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Inline checked</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input disabled id="inline-disabled-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                    <label for="inline-disabled-checkbox" class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500">Inline disabled</label>
-                            </div>
-                            <br />
-                            
-                            <div class="flex items-center me-4">
-                                <input id="inline-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                    <label for="inline-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Offer</label>
-                            </div>
-                        
-                            
-                        </div>
-                        
-
-                        
-
-
-                        
                     </div>
-
-                    <div class="flex justify-end mt-6">
-                        <button class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600">Save</button>
+                    <div className="mb-4">
+                        <button type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">Save</button>
                     </div>
                 </form>
-            </section>
 
-            <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20">
-                <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Account settings</h2>
-
-                <form>
-                    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-                        <div>
-                            <label class="text-gray-700" for="username">Username</label>
-                            <input id="username" type="text" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
-
-                        <div>
-                            <label class="text-gray-700" for="emailAddress">Email Address</label>
-                            <input id="emailAddress" type="email" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
-
-                        <div>
-                            <label class="text-gray-700" for="password">Password</label>
-                            <input id="password" type="password" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
-
-                        <div>
-                            <label class="text-gray-700 dark:text-gray-200" for="passwordConfirmation">Password Confirmation</label>
-                            <input id="passwordConfirmation" type="password" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+                <div>
+                    <div className="mb-4">
+                        <label htmlFor="file-upload" className="block text-sm font-medium text-black">Image</label>
+                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                            <div className="space-y-1 text-center">
+                                <svg className="mx-auto h-8 w-12 text-black" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round
+                                        " strokeLinejoin="round" />
+                                </svg>
+                                <div className="flex text-sm text-gray-600">
+                                    <label htmlFor="file-upload" className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 hover:text-indigo-500">
+                                        <span>Upload a file</span>
+                                        <input id="file-upload" name="file-upload" type="file" multiple accept=".jpg,.png,.jpeg" className="sr-only" onChange={(e) => setFiles(e.target.files)} />
+                                    </label>
+                                </div>
+                                <p className="text-xs text-black">PNG, JPG, GIF up to 2MB</p>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="flex justify-end mt-6">
-                        <button class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Save</button>
+                    <div className="mb-4">
+                        <button onClick={handleImageSubmit} className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">Upload Image</button>
                     </div>
-                </form>
-            </section>
-        </>
-    )
-}
 
-export default Listing
+                    {imageError && <p className="text-red-500 text-xs mt-1">{imageError}</p>}
+
+                    
+
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                        {formData.imageUrls.map((url, index) => (
+                            <div key={index} className="relative w-40 h-40 border border-gray-300 rounded-lg overflow-hidden">
+                                <img src={url} alt="uploaded vehicle" className="w-full h-full object-cover" />
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mb-4">
+                        <button type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">Save</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    );
+};
+
+export default VehicleListing;
