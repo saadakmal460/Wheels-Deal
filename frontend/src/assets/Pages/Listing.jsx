@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../../firebase';
+import { useSelector } from 'react-redux';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
 
 const VehicleListing = () => {
     const [files, setFiles] = useState([]);
@@ -17,10 +22,29 @@ const VehicleListing = () => {
         fuelType: '',
         imageUrls: []
     });
+    const [uploading, setUploading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
+    const [user, setUser] = useState({});
+    const { currentUser } = useSelector((state) => state.user);
+
+    useEffect(() => {
+        const resolveUser = async () => {
+            if (currentUser && currentUser instanceof Promise) {
+                const result = await currentUser;
+                setUser(result);
+            } else {
+                setUser(currentUser);
+            }
+        };
+        resolveUser();
+    }, [currentUser]);
 
     const handleImageSubmit = (e) => {
         e.preventDefault();
         if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+
+            setUploading(true);
             const promises = [];
 
             for (let i = 0; i < files.length; i++) {
@@ -30,11 +54,13 @@ const VehicleListing = () => {
             Promise.all(promises).then((urls) => {
                 setFormData({ ...formData, imageUrls: formData.imageUrls.concat(urls) });
                 setImageError(false);
+                setUploading(false);
             }).catch((error) => {
                 setImageError('2mb MAX');
             })
         } else {
             setImageError('Upload 6 images per post');
+            setUploading(false);
         }
     }
 
@@ -67,6 +93,58 @@ const VehicleListing = () => {
         setFormData({ ...formData, [name]: value });
     }
 
+
+    const handleRemoveImage = (index) => {
+        setFormData({
+            ...formData,
+            imageUrls: formData.imageUrls.filter((_, i) => i !== index),
+        })
+    }
+
+
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
+        setLoading(true);
+        console.log('Form data', formData)
+        try {
+            const res = await fetch('/api/lsiting/create',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ...formData, userRef: user._id }),
+                }
+            )
+
+            const data = await res.json();
+
+            if (data.sucess === false) {
+                setError(data.error);
+                return;
+            }
+
+            setLoading(false);
+            console.log(data);
+
+        } catch (error) {
+            setError(error);
+        }
+    }
+
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+
     return (
         <main className="p-3 max-w-6xl mx-auto">
             <h1 className="text-2xl font-bold text-black capitalize mb-4">Post Your Vehicle</h1>
@@ -74,32 +152,32 @@ const VehicleListing = () => {
                 <form className="space-y-4">
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="make">Make</label>
-                        <input name="make" id="make" type="text" value={formData.make} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                        <input name="make" id="make" type="text" value={formData.make} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="model">Model</label>
-                        <input name="model" id="model" type="text" value={formData.model} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                        <input name="model" id="model" type="text" value={formData.model} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="year">Year</label>
-                        <input name="year" id="year" type="number" value={formData.year} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                        <input name="year" id="year" type="number" value={formData.year} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="mileage">Mileage</label>
-                        <input name="mileage" id="mileage" type="number" value={formData.mileage} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                        <input name="mileage" id="mileage" type="number" value={formData.mileage} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="price">Price</label>
-                        <input name="price" id="price" type="number" value={formData.price} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md" required />
+                        <input name="price" id="price" type="number" value={formData.price} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="description">Description</label>
-                        <textarea name="description" id="description" value={formData.description} onChange={handleInputChange} rows="7" style={{ resize: 'none' }} className="block w-full p-2.5 text-sm text-black rounded-lg border border-gray-300" required></textarea>
+                        <textarea name="description" id="description" value={formData.description} onChange={handleInputChange} rows="7" style={{ resize: 'none' }} className="block w-full p-2.5 text-sm text-black rounded-lg border border-gray-300 shadow-sm" required></textarea>
                     </div>
 
                     <div className="mb-4">
@@ -123,18 +201,21 @@ const VehicleListing = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-black mb-2">Fuel Type</label>
-                        <div className="flex flex-wrap gap-2">
+                        <label className="block text-black mb-2" htmlFor="fuelType">Fuel Type</label>
+                        <select
+                            id="fuelType"
+                            name="fuelType"
+                            onChange={handleInputChange}
+                            className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                            required
+                        >
+
                             {['Petrol', 'Diesel', 'Electric', 'Hybrid', 'CNG', 'LPG', 'Hydrogen'].map((fuel, index) => (
-                                <div key={index} className="flex items-center space-x-2">
-                                    <input id={fuel.toLowerCase()} type="radio" value={fuel.toLowerCase()} name="fuelType" onChange={handleInputChange} className="w-4 h-4" required />
-                                    <label className="text-sm font-medium text-black" htmlFor={fuel.toLowerCase()}>{fuel}</label>
-                                </div>
+                                <option key={index} value={fuel.toLowerCase()}>
+                                    {fuel}
+                                </option>
                             ))}
-                        </div>
-                    </div>
-                    <div className="mb-4">
-                        <button type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">Save</button>
+                        </select>
                     </div>
                 </form>
 
@@ -158,23 +239,37 @@ const VehicleListing = () => {
                         </div>
                     </div>
                     <div className="mb-4">
-                        <button onClick={handleImageSubmit} className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">Upload Image</button>
+                        <Button
+                            component="label"
+                            role={undefined}
+                            variant="contained"
+                            tabIndex={-1}
+                            startIcon={<CloudUploadIcon />}
+                            disabled={uploading} onClick={handleImageSubmit}
+                        >
+                            {uploading ? 'Uploading' : 'Upload Images'}
+                            <VisuallyHiddenInput type="file" />
+                        </Button>
                     </div>
 
                     {imageError && <p className="text-red-500 text-xs mt-1">{imageError}</p>}
 
-                    
 
-                    <div className="grid grid-cols-2 gap-4 mt-4">
+
+                    <div className="mb-2">
                         {formData.imageUrls.map((url, index) => (
-                            <div key={index} className="relative w-40 h-40 border border-gray-300 rounded-lg overflow-hidden">
-                                <img src={url} alt="uploaded vehicle" className="w-full h-full object-cover" />
+                            <div key={url} className='flex justify-between items-center p-3'>
+                                <img src={url} alt="uploaded vehicle" className="w-20 h-20 object-contain rounded-lg" />
+                                <Button onClick={() => { handleRemoveImage(index) }} variant="outlined" startIcon={<DeleteIcon />}>
+                                    Delete
+                                </Button>
                             </div>
+
                         ))}
                     </div>
 
                     <div className="mb-4">
-                        <button type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">Save</button>
+                        <button disabled={loading} onClick={handleSubmit} type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">{loading ? "Posting" : "Post Vehicle"}</button>
                     </div>
                 </div>
             </div>

@@ -59,7 +59,7 @@ const Navbar1 = () => {
     return (
         <Navbar expand="lg" className="bg-body-tertiary navContainer">
             <Container fluid>
-                <Navbar.Brand href="#">REAL ESTATE</Navbar.Brand>
+                <Navbar.Brand href="#">NAPAK WHEELS</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
@@ -85,7 +85,7 @@ const Navbar1 = () => {
                             <Dropdown.Menu className="dropdown-menu-right">
                                 <Dropdown.Item as={Link} to="/editProfile">Edit Profile</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/profile">Delete Profile</Dropdown.Item>
-                                <Dropdown.Item onClick={handleLogOut}>{loading ? 'Sign Out' : 'Signing Out'}</Dropdown.Item>
+                                <Dropdown.Item onClick={handleLogOut}>{loading ? 'Signing Out' : 'Sign Out'}</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
 

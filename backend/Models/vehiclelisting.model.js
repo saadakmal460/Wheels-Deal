@@ -40,7 +40,7 @@ const vehicleSchema = mongoose.Schema({
         enum: ['petrol', 'diesel', 'electric', 'hybrid', 'cng', 'lpg', 'hydrogen'],
         required: true
     },
-    imageUrl: {
+    imageUrls: {
         type: Array,
         required: true
     },
