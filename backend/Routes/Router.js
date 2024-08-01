@@ -1,5 +1,5 @@
 const express = require('express');
-const {userController , UpdateUser , deleteUser} = require('../Controller/user.controller')
+const {userController , UpdateUser , deleteUser , getListing} = require('../Controller/user.controller')
 const {signUp} = require('../Controller/signUp.controller')
 const {signIn , SignOut} = require('../Controller/signIn.controller')
 const {verifyUser} = require('../Utils/verifyUser')
@@ -21,6 +21,8 @@ router.get('/signOut' ,   SignOut);
 // USER ROUTES
 router.post('/updateUser/:id' ,  verifyUser , UpdateUser);
 router.delete('/deleteUser/:id' ,  verifyUser , deleteUser);
+router.get('/userListings/:id' ,  verifyUser , getListing);
+
 
 
 // LISTING ROUTES

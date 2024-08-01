@@ -3,9 +3,10 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../../firebase';
 import { useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom'
+import Delete from '../Components/Delete';
 
 const VehicleListing = () => {
     const [files, setFiles] = useState([]);
@@ -27,6 +28,7 @@ const VehicleListing = () => {
     const [error, setError] = useState(false);
     const [user, setUser] = useState({});
     const { currentUser } = useSelector((state) => state.user);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const resolveUser = async () => {
@@ -127,6 +129,7 @@ const VehicleListing = () => {
 
             setLoading(false);
             console.log(data);
+            navigate('/');
 
         } catch (error) {
             setError(error);
@@ -260,9 +263,7 @@ const VehicleListing = () => {
                         {formData.imageUrls.map((url, index) => (
                             <div key={url} className='flex justify-between items-center p-3'>
                                 <img src={url} alt="uploaded vehicle" className="w-20 h-20 object-contain rounded-lg" />
-                                <Button onClick={() => { handleRemoveImage(index) }} variant="outlined" startIcon={<DeleteIcon />}>
-                                    Delete
-                                </Button>
+                                <Delete onClick={() => { handleRemoveImage(index) }}/>
                             </div>
 
                         ))}

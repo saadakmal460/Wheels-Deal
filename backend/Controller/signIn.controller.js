@@ -16,7 +16,7 @@ exports.signIn = async (req, res, next) => {
 
         const { password: pass, ...rest } = valid._doc;
 
-        const tokken = jwt.sign({ id: valid._id }, process.env.JWT_SECERT);
+        const tokken = jwt.sign({ id: valid._id }, process.env.JWT_SECERT , { expiresIn: '365d'});
         res.cookie('acess_tokken', tokken, { httpOnly: true }).status(200).json(rest)
 
 

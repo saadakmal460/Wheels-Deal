@@ -1,7 +1,7 @@
 const userModel = require('../Models/users.model');
 const bcrypt = require('bcryptjs');
 const customError = require('../Utils/error');
-
+const listingModel = require('../Models/vehiclelisting.model')
 
 exports.userController = (req, res) => {
     try {
@@ -64,3 +64,21 @@ exports.deleteUser = async (req, res, next) => {
 
 }
 
+exports.getListing = async (req, res, next) => {
+    
+    if (!req.user) {
+        return next(customError(401, 'Unauthorized'));
+    }
+
+    if (req.params.id !== req.user.id) {
+        return next(customError(403, 'Action not allowed'));
+    }
+
+    try {
+        // Find listings by user reference ID
+        const listings = await listingModel.find({ userRef: req.params.id });
+        res.status(200).json(listings);
+    } catch (error) {
+        next(error);
+    }
+};

@@ -83,6 +83,7 @@ const Navbar1 = () => {
                                 />
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="dropdown-menu-right">
+                            <Dropdown.Item as={Link} to="/myListings">My Listings</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/editProfile">Edit Profile</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/profile">Delete Profile</Dropdown.Item>
                                 <Dropdown.Item onClick={handleLogOut}>{loading ? 'Signing Out' : 'Sign Out'}</Dropdown.Item>
