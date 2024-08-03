@@ -3,7 +3,7 @@ const {userController , UpdateUser , deleteUser , getListing} = require('../Cont
 const {signUp} = require('../Controller/signUp.controller')
 const {signIn , SignOut} = require('../Controller/signIn.controller')
 const {verifyUser} = require('../Utils/verifyUser')
-const {Create} = require('../Controller/listing.controller')
+const {Create, GetLisintg} = require('../Controller/listing.controller')
 
 
 
@@ -27,6 +27,8 @@ router.get('/userListings/:id' ,  verifyUser , getListing);
 
 // LISTING ROUTES
 router.post('/lsiting/create' , verifyUser , Create);
+router.get('/listing/:id' , verifyUser , GetLisintg);
+
 
 
 

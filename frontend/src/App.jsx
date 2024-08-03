@@ -10,6 +10,7 @@ import PrivateRoute from './assets/Components/PrivateRoute';
 import EditProfile from './assets/Pages/EditProfile';
 import Listing from './assets/Pages/Listing';
 import ShowListings from './assets/Pages/ShowListings';
+import UserIndiviualListing from './assets/Pages/UserIndiviualListing';
 
 
 const App = () => {
@@ -24,6 +25,8 @@ const App = () => {
           <Route path='/editProfile' element={<EditProfile />} />
           <Route path='/listing' element={<Listing />} />
           <Route path='/myListings' element={<ShowListings />} />
+          <Route path='/listing/:id' element={<UserIndiviualListing />} />
+
         </Route>
 
         <Route path='/signIn' element={<SignIn />} />

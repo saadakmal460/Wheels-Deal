@@ -13,4 +13,15 @@ const Create = async(req,res,next)=>{
 
 }
 
-module.exports = {Create}
+
+
+const GetLisintg = async (req,res,next)=>{
+    try {
+        const list = await VehicleListingModel.find({_id: req.params.id});
+        return res.status(200).json(list);
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {Create ,GetLisintg}
