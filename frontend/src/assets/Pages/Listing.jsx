@@ -30,6 +30,7 @@ const VehicleListing = () => {
     const { currentUser } = useSelector((state) => state.user);
     const navigate = useNavigate();
     const [formError, setFormError] = useState({});
+    const [progress , setProgress] = useState(0);
 
     useEffect(() => {
         const resolveUser = async () => {
@@ -77,7 +78,7 @@ const VehicleListing = () => {
             uploadTask.on(
                 'state_changed', (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log(Math.round(progress));
+                    setProgress(Math.round(progress));
                 },
                 (error) => {
                     reject(error);
@@ -134,7 +135,7 @@ const VehicleListing = () => {
 
             setLoading(false);
             console.log(data);
-            navigate(`/listing/${data._id}`);
+            navigate(`/listing/${data._id}`, { state: { isTrue: true , message: 'Ad Posted Sucessfully' } });
 
         } catch (error) {
             setError(error);
@@ -329,7 +330,7 @@ const VehicleListing = () => {
                             startIcon={<CloudUploadIcon />}
                             disabled={uploading} onClick={handleImageSubmit}
                         >
-                            {uploading ? 'Uploading' : 'Upload Images'}
+                            {uploading ? `Uploading ${progress}%` : 'Upload Images'}
                             <VisuallyHiddenInput type="file" />
                         </Button>
                     </div>
@@ -349,7 +350,7 @@ const VehicleListing = () => {
                     </div>
 
                     <div className="mb-4">
-                        <button disabled={loading} onClick={handleSubmit} type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">{loading ? "Posting" : "Post Vehicle"}</button>
+                        <button disabled={loading} onClick={handleSubmit} type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">{loading ? "Posting" : "Post Ad"}</button>
                     </div>
                 </div>
             </div>

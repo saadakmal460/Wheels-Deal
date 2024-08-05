@@ -38,6 +38,7 @@ const EditListing = () => {
     const { currentUser } = useSelector((state) => state.user);
     const navigate = useNavigate();
     const [formError, setFormError] = useState({});
+    const [progress , setProgress] = useState(0);
 
     useEffect(() => {
         const resolveUser = async () => {
@@ -53,7 +54,7 @@ const EditListing = () => {
 
     const handleImageSubmit = (e) => {
         e.preventDefault();
-        if (files.length > 0 && files.length + formData.imageUrls.length + listingData.imageUrls.length < 7) {
+        if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
 
             setUploading(true);
             const promises = [];
@@ -85,7 +86,7 @@ const EditListing = () => {
             uploadTask.on(
                 'state_changed', (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log(Math.round(progress));
+                    setProgress(Math.round(progress));
                 },
                 (error) => {
                     reject(error);
@@ -112,12 +113,63 @@ const EditListing = () => {
         })
     }
 
+    const validateForm = () => {
+        let valid = true;
+        let errors = {};
 
+        if (formData.make.trim().length === 0) {
+            valid = false;
+            errors.make = 'Make is required';
+        }
+        if (formData.model.trim().length === 0) {
+            valid = false;
+            errors.model = 'Model is required';
+        }
+        if (formData.year <= 0 || isNaN(formData.year)) {
+            valid = false;
+            errors.year = 'Valid year is required';
+        }
+        if (parseInt(formData.mileage, 10) < 0 || isNaN(parseInt(formData.mileage, 10))) {
+            valid = false;
+            errors.mileage = 'Mileage cannot be negative';
+        }
 
+        if (parseInt(formData.price, 10) < 0 || isNaN(parseInt(formData.price, 10))) {
+            valid = false;
+            errors.price = 'Price cannot be negative';
+        }
+
+        if (formData.description.trim().length === 0 || formData.description.length > 500) {
+            valid = false;
+            errors.description = 'Description is required and cannot exceed 500 characters';
+        }
+        if (!formData.condition) {
+            valid = false;
+            errors.condition = 'Condition is required';
+        }
+        if (!formData.transmission) {
+            valid = false;
+            errors.transmission = 'Transmission is required';
+        }
+        if (!formData.fuelType) {
+            valid = false;
+            errors.fuelType = 'Fuel type is required';
+        }
+        if (!Array.isArray(formData.imageUrls) || formData.imageUrls.length === 0) {
+            valid = false;
+            errors.imageUrls = 'At least 1 image is required';
+        }
+
+        setFormError(errors);
+        return valid;
+    };
 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
+        if (!validateForm()) {
+            return;
+        }
 
         setLoading(true);
         try {
@@ -140,7 +192,9 @@ const EditListing = () => {
 
             setLoading(false);
             console.log(data);
-            navigate(`/listing/${data.data._id}`);
+
+            
+            navigate(`/listing/${data.data._id}`, { state: { isTrue: true , message: 'Ad Updated Sucessfully' } });
 
         } catch (error) {
             setError(error);
@@ -284,7 +338,7 @@ const EditListing = () => {
                             startIcon={<CloudUploadIcon />}
                             disabled={uploading} onClick={handleImageSubmit}
                         >
-                            {uploading ? 'Uploading' : 'Upload Images'}
+                            {uploading ? `Uploading ${progress} %` : 'Upload Images'}
                             <VisuallyHiddenInput type="file" />
                         </Button>
                     </div>
@@ -304,7 +358,7 @@ const EditListing = () => {
                     </div>
 
                     <div className="mb-4">
-                        <button disabled={loading} onClick={handleSubmit} type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">{loading ? "Posting" : "Post Vehicle"}</button>
+                        <button disabled={loading} onClick={handleSubmit} type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">{loading ? "Updating" : "Update Ad"}</button>
                     </div>
                 </div>
             </div>

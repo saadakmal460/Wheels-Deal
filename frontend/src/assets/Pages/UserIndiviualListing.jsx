@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { MdLocalGasStation } from 'react-icons/md';
-import { FaTachometerAlt, FaDollarSign, FaCog,FaExclamationCircle , FaCar } from 'react-icons/fa';
+import { FaTachometerAlt, FaDollarSign, FaCog, FaCar } from 'react-icons/fa';
 import Loader from '../Components/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UserIndiviualListing = () => {
     const { id } = useParams();
     const [listing, setListing] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [toastShown, setToastShown] = useState(false);
+
+    const location = useLocation();
+    const location2 = useLocation();
+
+
+    var available = location.state?.isTrue;
+    var message = location2.state?.message;
+
 
     useEffect(() => {
         const fetchListing = async () => {
@@ -45,14 +56,33 @@ const UserIndiviualListing = () => {
             return price;
         }
     };
-    
 
-    if (loading) return <Loader/>;
+    useEffect(() => {
+        if (available && !toastShown) {
+            toast.success(message, {
+                position: "bottom-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+            setToastShown(true);
+            
+            location.state.isTrue = false; 
+        }
+    }, [available, toastShown, location.state]);
+
+ 
+
+    if (loading) return <Loader />;
     if (error) return <p className="text-center text-red-500">{error}</p>;
     if (!listing) return <p className="text-center text-gray-500">No listing available.</p>;
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-4xl">
+            <ToastContainer />
             <div className="bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
                 <Carousel showArrows={true} infiniteLoop={true} showThumbs={false} className="mb-6">
                     {listing[0].imageUrls.map((url, index) => (
@@ -71,7 +101,7 @@ const UserIndiviualListing = () => {
                             <FaDollarSign className="mr-2 text-gray-700" /> Price: {formatPrice(listing[0].price)} Rs
                         </div>
                         <div className="text-lg font-medium text-gray-800 flex items-center">
-                            <FaCar className="mr-2 text-gray-700" /> Condtion: {listing[0].condition}
+                            <FaCar className="mr-2 text-gray-700" /> Condition: {listing[0].condition}
                         </div>
                         <div className="text-lg font-medium text-gray-800 flex items-center">
                             <MdLocalGasStation className="mr-2 text-gray-700" /> Fuel: {listing[0].fuelType}

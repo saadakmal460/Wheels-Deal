@@ -47,10 +47,10 @@ const ShowListings = () => {
         if (deleteSuccess) {
             toast.success(deleteSuccess, {
                 position: "bottom-center",
-                autoClose: 3000,
-                hideProgressBar: false,
+                autoClose: 2000,
+                hideProgressBar: true,
                 closeOnClick: true,
-                pauseOnHover: true,
+                pauseOnHover: false,
                 draggable: true,
                 progress: undefined,
             });
@@ -60,10 +60,10 @@ const ShowListings = () => {
         if (deleteError) {
             toast.error(deleteError, {
                 position: "bottom-center",
-                autoClose: 3000,
-                hideProgressBar: false,
+                autoClose: 2000,
+                hideProgressBar: true,
                 closeOnClick: true,
-                pauseOnHover: true,
+                pauseOnHover: false,
                 draggable: true,
                 progress: undefined,
             });
