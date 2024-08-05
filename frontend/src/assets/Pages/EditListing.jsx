@@ -7,21 +7,29 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom'
 import Delete from '../Components/Delete';
+import { useParams, useLocation } from 'react-router-dom';
 
-const VehicleListing = () => {
+
+const EditListing = () => {
     const [files, setFiles] = useState([]);
+    const { id } = useParams();
+    const location = useLocation();
+
+    const listingData = location.state.listing;
+
+    console.log(listingData.make);
     const [imageError, setImageError] = useState(false);
     const [formData, setFormData] = useState({
-        make: '',
-        model: '',
-        year: '',
-        mileage: '',
-        price: '',
-        description: '',
-        condition: '',
-        transmission: '',
-        fuelType: '',
-        imageUrls: []
+        make: listingData.make,
+        model: listingData.model,
+        year: listingData.year,
+        mileage: listingData.mileage,
+        price: listingData.price,
+        description: listingData.description,
+        condition: listingData.condition,
+        transmission: listingData.transmission,
+        fuelType: listingData.fuelType,
+        imageUrls: listingData.imageUrls
     });
     const [uploading, setUploading] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -45,7 +53,7 @@ const VehicleListing = () => {
 
     const handleImageSubmit = (e) => {
         e.preventDefault();
-        if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+        if (files.length > 0 && files.length + formData.imageUrls.length + listingData.imageUrls.length < 7) {
 
             setUploading(true);
             const promises = [];
@@ -105,19 +113,17 @@ const VehicleListing = () => {
     }
 
 
+
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        console.log('Form data', formData)
-        if (!validateForm()) {
-            return;
-        }
         setLoading(true);
         try {
-            const res = await fetch('/api/lsiting/create',
+            const res = await fetch(`/api/updateListing/${id}`,
                 {
-                    method: 'POST',
+                    method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -134,7 +140,7 @@ const VehicleListing = () => {
 
             setLoading(false);
             console.log(data);
-            navigate(`/listing/${data._id}`);
+            navigate(`/listing/${data.data._id}`);
 
         } catch (error) {
             setError(error);
@@ -153,59 +159,8 @@ const VehicleListing = () => {
         width: 1,
     });
 
-    const validateForm = () => {
-        let valid = true;
-        let errors = {};
 
-        if (formData.make.trim().length === 0) {
-            valid = false;
-            errors.make = 'Make is required';
-        }
-        if (formData.model.trim().length === 0) {
-            valid = false;
-            errors.model = 'Model is required';
-        }
-        if (formData.year <= 0 || isNaN(formData.year)) {
-            valid = false;
-            errors.year = 'Valid year is required';
-        }
-        if (parseInt(formData.mileage, 10) < 0 || isNaN(parseInt(formData.mileage, 10))) {
-            valid = false;
-            errors.mileage = 'Mileage cannot be negative';
-        }
-
-        if (parseInt(formData.price, 10) < 0 || isNaN(parseInt(formData.price, 10))) {
-            valid = false;
-            errors.price = 'Price cannot be negative';
-        }
-
-        if (formData.description.trim().length === 0 || formData.description.length > 500) {
-            valid = false;
-            errors.description = 'Description is required and cannot exceed 500 characters';
-        }
-        if (!formData.condition) {
-            valid = false;
-            errors.condition = 'Condition is required';
-        }
-        if (!formData.transmission) {
-            valid = false;
-            errors.transmission = 'Transmission is required';
-        }
-        if (!formData.fuelType) {
-            valid = false;
-            errors.fuelType = 'Fuel type is required';
-        }
-        if (!Array.isArray(formData.imageUrls) || formData.imageUrls.length === 0) {
-            valid = false;
-            errors.imageUrls = 'At least 1 image is required';
-        }
-
-        setFormError(errors);
-        return valid;
-    };
-
-
-
+    console.log(formData);
 
 
     return (
@@ -215,41 +170,41 @@ const VehicleListing = () => {
                 <form className="space-y-4">
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="make">Make</label>
-                        <input name="make" id="make" type="text" value={formData.make} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
+                        <input name="make" id="make" type="text" defaultValue={listingData.make} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                         {formError.make && <p className="text-red-500 text-xs">{formError.make}</p>}
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="model">Model</label>
-                        <input name="model" id="model" type="text" value={formData.model} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
+                        <input name="model" id="model" type="text" defaultValue={listingData.model} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                         {formError.model && <p className="text-red-500 text-xs">{formError.model}</p>}
 
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="year">Year</label>
-                        <input name="year" id="year" type="number" value={formData.year} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
+                        <input name="year" id="year" type="number" defaultValue={listingData.year} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                         {formError.year && <p className="text-red-500 text-xs">{formError.year}</p>}
 
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="mileage">Mileage</label>
-                        <input name="mileage" id="mileage" type="number" value={formData.mileage} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
+                        <input name="mileage" id="mileage" type="number" defaultValue={listingData.mileage} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                         {formError.mileage && <p className="text-red-500 text-xs">{formError.mileage}</p>}
 
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="price">Price</label>
-                        <input name="price" id="price" type="number" value={formData.price} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
+                        <input name="price" id="price" type="number" defaultValue={listingData.price} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
                         {formError.price && <p className="text-red-500 text-xs">{formError.price}</p>}
 
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-black mb-2" htmlFor="description">Description</label>
-                        <textarea name="description" id="description" value={formData.description} onChange={handleInputChange} rows="7" style={{ resize: 'none' }} className="block w-full p-2.5 text-sm text-black rounded-lg border border-gray-300 shadow-sm" required></textarea>
+                        <textarea name="description" id="description" defaultValue={listingData.description} onChange={handleInputChange} rows="7" style={{ resize: 'none' }} className="block w-full p-2.5 text-sm text-black rounded-lg border border-gray-300 shadow-sm" required></textarea>
                         {formError.description && <p className="text-red-500 text-xs">{formError.description}</p>}
 
                     </div>
@@ -357,4 +312,4 @@ const VehicleListing = () => {
     );
 };
 
-export default VehicleListing;
+export default EditListing;

@@ -17,7 +17,7 @@ exports.signIn = async (req, res, next) => {
         const { password: pass, ...rest } = valid._doc;
 
         const tokken = jwt.sign({ id: valid._id }, process.env.JWT_SECERT , { expiresIn: '365d'});
-        res.cookie('acess_tokken', tokken, { httpOnly: true }).status(200).json(rest)
+        res.cookie('acess_tokken', tokken, { httpOnly: true,  expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365 * 10) }).status(200).json(rest)
 
 
 

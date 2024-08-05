@@ -54,7 +54,7 @@ const Profile = () => {
       }
 
       dispatch(deleteUserSucess());
-      navigate('/'); // Redirect to home page or any other page
+      navigate('/');
 
     } catch (error) {
       dispatch(deleteUserFailure(error));

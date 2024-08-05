@@ -4,11 +4,17 @@ import Delete from '../Components/Delete';
 import Edit from '../Components/Edit';
 import { Link } from 'react-router-dom';
 import Loader from '../Components/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ShowListings = () => {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [deleteError, setDeleteError] = useState(null);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [deleteSuccess, setDeleteSuccess] = useState(null);
+
     const { currentUser } = useSelector((state) => state.user);
 
     useEffect(() => {
@@ -37,11 +43,65 @@ const ShowListings = () => {
         fetchListings();
     }, [currentUser]);
 
-    if (loading) return <Loader/>;
+    useEffect(() => {
+        if (deleteSuccess) {
+            toast.success(deleteSuccess, {
+                position: "bottom-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            setDeleteSuccess(null); // Clear the message after showing
+        }
 
+        if (deleteError) {
+            toast.error(deleteError, {
+                position: "bottom-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            setDeleteError(null); // Clear the message after showing
+        }
+    }, [deleteSuccess, deleteError]);
+
+    const handleDelete = async (id) => {
+        try {
+            setDeleteLoading(true);
+            const res = await fetch(`/api/delete/${id}`, {
+                method: 'DELETE',
+            });
+
+            const data = await res.json();
+
+            if (data.success === false) {
+                setDeleteError(data.error);
+                setDeleteSuccess(null);
+            } else {
+                setListings(prevListings => prevListings.filter(listing => listing._id !== id));
+                setDeleteSuccess('Listing successfully deleted.');
+                setDeleteError(null);
+            }
+        } catch (error) {
+            setDeleteError('An error occurred while deleting the listing.');
+            setDeleteSuccess(null);
+        } finally {
+            setDeleteLoading(false);
+        }
+    }
+
+    if (loading) return <Loader />;
+    if (deleteLoading) return <Loader />;
 
     return (
         <>
+            <ToastContainer />
             <h1 className="text-3xl font-bold text-center mb-5">
                 My Listings
             </h1>
@@ -52,7 +112,7 @@ const ShowListings = () => {
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col items-center">
                         {listings.map((listing) => (
-                            <div key={listing.id} className="w-full max-w-2xl bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4 p-4 flex items-center">
+                            <div key={listing._id} className="w-full max-w-2xl bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4 p-4 flex flex-col sm:flex-row items-center">
                                 <img
                                     className="w-24 h-24 rounded object-cover mr-4"
                                     src={listing.imageUrls[0] || '/docs/images/blog/image-1.jpg'}
@@ -65,9 +125,11 @@ const ShowListings = () => {
                                         </h5>
                                     </Link>
                                 </div>
-                                <div className="flex space-x-2">
-                                    <Edit />
-                                    <Delete listingId={listing.id} />
+                                <div className="flex space-x-2 mt-4 sm:mt-0">
+                                    <Link to={`/editList/${listing._id}`} state={{listing}}>
+                                        <Edit />
+                                    </Link>
+                                    <Delete onClick={() => handleDelete(listing._id)} />
                                 </div>
                             </div>
                         ))}

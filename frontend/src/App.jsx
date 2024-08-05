@@ -11,6 +11,7 @@ import EditProfile from './assets/Pages/EditProfile';
 import Listing from './assets/Pages/Listing';
 import ShowListings from './assets/Pages/ShowListings';
 import UserIndiviualListing from './assets/Pages/UserIndiviualListing';
+import EditListing from './assets/Pages/EditListing';
 
 
 const App = () => {
@@ -26,6 +27,8 @@ const App = () => {
           <Route path='/listing' element={<Listing />} />
           <Route path='/myListings' element={<ShowListings />} />
           <Route path='/listing/:id' element={<UserIndiviualListing />} />
+          <Route path='/editList/:id' element={<EditListing />} />
+
 
         </Route>
 
