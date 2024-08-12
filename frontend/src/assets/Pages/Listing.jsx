@@ -7,6 +7,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom'
 import Delete from '../Components/Delete';
+import Loader from '../Components/Loader';
 
 const VehicleListing = () => {
     const [files, setFiles] = useState([]);
@@ -21,6 +22,8 @@ const VehicleListing = () => {
         condition: '',
         transmission: '',
         fuelType: '',
+        sellerContact: '',
+        sellerAddress: '',
         imageUrls: []
     });
     const [uploading, setUploading] = useState(false);
@@ -30,7 +33,7 @@ const VehicleListing = () => {
     const { currentUser } = useSelector((state) => state.user);
     const navigate = useNavigate();
     const [formError, setFormError] = useState({});
-    const [progress , setProgress] = useState(0);
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         const resolveUser = async () => {
@@ -94,6 +97,7 @@ const VehicleListing = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        console.log(name)
         setFormData({ ...formData, [name]: value });
     }
 
@@ -135,7 +139,7 @@ const VehicleListing = () => {
 
             setLoading(false);
             console.log(data);
-            navigate(`/listing/${data._id}`, { state: { isTrue: true , message: 'Ad Posted Sucessfully' } });
+            navigate(`/listing/${data._id}`, { state: { isTrue: true, message: 'Ad Posted Sucessfully' } });
 
         } catch (error) {
             setError(error);
@@ -196,6 +200,18 @@ const VehicleListing = () => {
             valid = false;
             errors.fuelType = 'Fuel type is required';
         }
+        if (formData.sellerAddress.trim().length === 0) {
+            valid = false;
+            errors.sellerAddress = 'Address is required';
+        }
+        if (formData.sellerContact.trim().length === 0) {
+            valid = false;
+            errors.sellerContact = 'Contact is required';
+        } else if (!/^\d{11}$/.test(formData.sellerContact.trim())) {
+            valid = false;
+            errors.sellerContact = 'Contact must be 11 digits long and only contain numbers';
+        }
+
         if (!Array.isArray(formData.imageUrls) || formData.imageUrls.length === 0) {
             valid = false;
             errors.imageUrls = 'At least 1 image is required';
@@ -204,6 +220,9 @@ const VehicleListing = () => {
         setFormError(errors);
         return valid;
     };
+
+
+    if(loading) return <Loader />
 
 
 
@@ -276,7 +295,6 @@ const VehicleListing = () => {
                             <label className="text-sm font-medium text-black" htmlFor="manual">Manual</label>
                         </div>
                         {formError.transmission && <p className="text-red-500 text-xs">{formError.transmission}</p>}
-
                     </div>
 
                     <div className="mb-4">
@@ -301,6 +319,17 @@ const VehicleListing = () => {
                 </form>
 
                 <div>
+                    <div className="mb-4">
+                        <label className="block text-black mb-2" htmlFor="contact">Contact</label>
+                        <input name="sellerContact" id="contact" type="text" defaultValue={formData.sellerContact} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
+                        {formError.sellerContact && <p className="text-red-500 text-xs">{formError.sellerContact}</p>}
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-black mb-2" htmlFor="make">Address</label>
+                        <input name="sellerAddress" id="address" type="text" defaultValue={formData.sellerAddress} onChange={handleInputChange} className="block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md shadow-sm" required />
+                        {formError.sellerAddress && <p className="text-red-500 text-xs">{formError.sellerAddress}</p>}
+                    </div>
+
                     <div className="mb-4">
                         <label htmlFor="file-upload" className="block text-sm font-medium text-black">Image</label>
                         <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">

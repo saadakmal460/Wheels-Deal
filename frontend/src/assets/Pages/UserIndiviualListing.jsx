@@ -3,7 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { MdLocalGasStation } from 'react-icons/md';
-import { FaTachometerAlt, FaDollarSign, FaCog, FaCar } from 'react-icons/fa';
+import { FaTachometerAlt, FaDollarSign, FaCog, FaCar, FaPhoneAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import Loader from '../Components/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +14,6 @@ const UserIndiviualListing = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [toastShown, setToastShown] = useState(false);
-
     const location = useLocation();
     const location2 = useLocation();
 
@@ -69,12 +68,12 @@ const UserIndiviualListing = () => {
                 progress: undefined,
             });
             setToastShown(true);
-            
-            location.state.isTrue = false; 
+
+            location.state.isTrue = false;
         }
     }, [available, toastShown, location.state]);
 
- 
+
 
     if (loading) return <Loader />;
     if (error) return <p className="text-center text-red-500">{error}</p>;
@@ -108,6 +107,12 @@ const UserIndiviualListing = () => {
                         </div>
                         <div className="text-lg font-medium text-gray-800 flex items-center">
                             <FaCog className="mr-2 text-gray-700" /> Transmission: {listing[0].transmission}
+                        </div>
+                        <div className="text-lg font-medium text-gray-800 flex items-center">
+                            <FaPhoneAlt className="mr-2 text-gray-700" /> Seller Contact: {listing[0].sellerContact}
+                        </div>
+                        <div className="text-lg font-medium text-gray-800 flex items-center">
+                            <FaMapMarkerAlt className="mr-2 text-gray-700" /> Seller Address: {listing[0].sellerAddress}
                         </div>
                     </div>
                     <p className="text-lg text-gray-700">

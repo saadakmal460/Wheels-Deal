@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { type } = require('os');
 
 const vehicleSchema = mongoose.Schema({
     make: {
@@ -39,6 +40,14 @@ const vehicleSchema = mongoose.Schema({
         type: String,
         enum: ['petrol', 'diesel', 'electric', 'hybrid', 'cng', 'lpg', 'hydrogen'],
         required: true
+    },
+    sellerContact:{
+        type:String,
+        required:true
+    },
+    sellerAddress:{
+        type:String,
+        required:true
     },
     imageUrls: {
         type: Array,
