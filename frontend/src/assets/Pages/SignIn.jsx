@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInFailure, signInSucess } from '../../Redux/User/UserSlice';
+import { FaSignInAlt, FaSpinner } from 'react-icons/fa';
+
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
@@ -72,7 +74,20 @@ const SignIn = () => {
         <input type="email" className='border p-3 rounded-lg' placeholder='Email' id='email' onChange={handleChange} />
         <input type="password" className='border p-3 rounded-lg' placeholder='Password' id='password' onChange={handleChange} />
 
-        <button className='bg-slate-700 text-white rounded-lg uppercase p-3 hover:opacity-90 disabled:opacity-80' disabled={loading}> {loading ? 'Loading....' : 'Sign In'}</button>
+        <button
+          className='bg-slate-700 text-white rounded-lg uppercase p-3 hover:opacity-90 disabled:opacity-80'
+          disabled={loading}
+        >
+          {loading ? (
+            <span>
+              <FaSpinner className="inline-block mr-2 animate-spin" /> Signing In
+            </span>
+          ) : (
+            <span>
+              <FaSignInAlt className="inline-block mr-2" /> Sign In
+            </span>
+          )}
+        </button>
 
         <div className='flex gap-2'>
           <p>Dont Have an account? </p>

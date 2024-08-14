@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom'
 import Delete from '../Components/Delete';
 import Loader from '../Components/Loader';
+import { FaCar, FaSpinner } from 'react-icons/fa';
 
 const VehicleListing = () => {
     const [files, setFiles] = useState([]);
@@ -222,7 +223,7 @@ const VehicleListing = () => {
     };
 
 
-    if(loading) return <Loader />
+    if (loading) return <Loader />
 
 
 
@@ -379,7 +380,22 @@ const VehicleListing = () => {
                     </div>
 
                     <div className="mb-4">
-                        <button disabled={loading} onClick={handleSubmit} type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">{loading ? "Posting" : "Post Ad"}</button>
+                        <button
+                            disabled={loading}
+                            onClick={handleSubmit}
+                            type="submit"
+                            className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600"
+                        >
+                            {loading ? (
+                                <span>
+                                    <FaSpinner className="inline-block mr-2 animate-spin" /> Posting
+                                </span>
+                            ) : (
+                                <span>
+                                    <FaCar className="inline-block mr-2" /> Post Vehicle
+                                </span>
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>

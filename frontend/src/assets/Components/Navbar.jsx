@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { signOutStart, signOutSucess, signOutFailure } from '../../Redux/User/UserSlice';
+import { FaList, FaUserEdit, FaUserTimes, FaSignOutAlt, FaSignInAlt } from 'react-icons/fa';
 
 const Navbar1 = () => {
     const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -82,17 +83,28 @@ const Navbar1 = () => {
                                     alt='Profile'
                                 />
                             </Dropdown.Toggle>
-                            <Dropdown.Menu className="dropdown-menu-right">
-                            <Dropdown.Item as={Link} to="/myListings">My Listings</Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/editProfile">Edit Profile</Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/profile">Delete Profile</Dropdown.Item>
-                                <Dropdown.Item onClick={handleLogOut}>{loading ? 'Signing Out' : 'Sign Out'}</Dropdown.Item>
+                            <Dropdown.Menu className="dropdown-menu-right" style={{ minWidth: '200px', borderRadius: '12px' }}>
+                                <Dropdown.Item as={Link} to="/myListings" className="d-flex align-items-center">
+                                    <FaList className="me-2" /> <span>My Listings</span>
+                                </Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/editProfile" className="d-flex align-items-center">
+                                    <FaUserEdit className="me-2" /> <span>Edit Profile</span>
+                                </Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/profile" className="d-flex align-items-center">
+                                    <FaUserTimes className="me-2" /> <span>Delete Profile</span>
+                                </Dropdown.Item>
+                                <Dropdown.Item onClick={handleLogOut} className="d-flex align-items-center">
+                                    <FaSignOutAlt className="me-2" /> <span>{loading ? 'Signing Out' : 'Sign Out'}</span>
+                                </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
 
+
                     ) : (
                         <Nav style={{ maxHeight: '100px' }} navbarScroll>
-                            <Nav.Link as={Link} to="/signIn" className="me-3">Sign In</Nav.Link>
+                            <Nav.Link as={Link} to="/signIn" className="me-3 d-flex align-items-center">
+                                <FaSignInAlt className="me-2" /> Sign In
+                            </Nav.Link>
                         </Nav>
                     )}
                 </Navbar.Collapse>

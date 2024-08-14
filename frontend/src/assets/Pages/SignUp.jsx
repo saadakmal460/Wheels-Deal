@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { FaSpinner, FaUserPlus } from 'react-icons/fa';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
@@ -61,7 +62,20 @@ const SignUp = () => {
         <input type="email" className='border p-3 rounded-lg' placeholder='Email' id='email' onChange={handleChange} />
         <input type="password" className='border p-3 rounded-lg' placeholder='Password' id='password' onChange={handleChange} />
 
-        <button className='bg-slate-700 text-white rounded-lg uppercase p-3 hover:opacity-90 disabled:opacity-80' disabled={loading}> {loading ? 'Creating User' : 'Sign Up'}</button>
+        <button
+          className='bg-slate-700 text-white rounded-lg uppercase p-3 hover:opacity-90 disabled:opacity-80'
+          disabled={loading}
+        >
+          {loading ? (
+            <span>
+              <FaSpinner className="inline-block mr-2 animate-spin" /> Creating User
+            </span>
+          ) : (
+            <span>
+              <FaUserPlus className="inline-block mr-2" /> Sign Up
+            </span>
+          )}
+        </button>
 
         <div className='flex gap-2'>
           <p>Have an account? </p>

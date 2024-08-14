@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom'
 import Delete from '../Components/Delete';
 import { useParams, useLocation } from 'react-router-dom';
+import { FaEdit ,FaSpinner  } from 'react-icons/fa';
 
 
 const EditListing = () => {
@@ -109,6 +110,7 @@ const EditListing = () => {
 
 
     const handleRemoveImage = (index) => {
+        
         setFormData({
             ...formData,
             imageUrls: formData.imageUrls.filter((_, i) => i !== index),
@@ -174,13 +176,13 @@ const EditListing = () => {
         }
 
         setFormError(errors);
-        console.log('Errors' , errors);
+        console.log('Errors', errors);
         return valid;
     };
 
     const handleSubmit = async (e) => {
 
-        
+
         if (!validateForm()) {
             return;
         }
@@ -231,6 +233,7 @@ const EditListing = () => {
 
 
     console.log(formData);
+    
 
 
     return (
@@ -385,7 +388,22 @@ const EditListing = () => {
                     </div>
 
                     <div className="mb-4">
-                        <button disabled={loading} onClick={handleSubmit} type="submit" className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600">{loading ? "Updating" : "Update Ad"}</button>
+                        <button
+                            disabled={loading}
+                            onClick={handleSubmit}
+                            type="submit"
+                            className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600"
+                        >
+                            {loading ? (
+                                <span>
+                                    <FaSpinner  className="inline-block mr-2 animate-spin" /> Updating
+                                </span>
+                            ) : (
+                                <span>
+                                    <FaEdit className="inline-block mr-2" /> Update Ad
+                                </span>
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import { updateUserStart, updateUserFailure, updateUserSucess } from '../../Redux/User/UserSlice';
+import { FaEdit, FaSpinner } from 'react-icons/fa';
 
 const EditProfile = () => {
     const [formData, setFormData] = useState({});
@@ -91,7 +92,7 @@ const EditProfile = () => {
 
             dispatch(updateUserSucess(data));
             setupdateSucess(true);
-            
+
         } catch (error) {
             dispatch(updateUserFailure(error));
 
@@ -114,7 +115,24 @@ const EditProfile = () => {
                     <input type="text" className='border p-3 rounded-lg' placeholder='Username' id='username' defaultValue={user && user.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} />
                     <input type="email" className='border p-3 rounded-lg' placeholder='Email' id='email' defaultValue={user && user.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                     <input type="password" className='border p-3 rounded-lg' placeholder='Password' id='password' onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
-                    <button className='bg-slate-700 text-white rounded-lg uppercase p-3 hover:opacity-90 disabled:opacity-80' disabled={loading}>{loading ? 'Updating' : 'Update'}</button>
+                    
+                        <button
+                            disabled={loading}
+                            onClick={handleSubmit}
+                            type="submit"
+                            className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600"
+                        >
+                            {loading ? (
+                                <span>
+                                    <FaSpinner className="inline-block mr-2 animate-spin" /> Updating
+                                </span>
+                            ) : (
+                                <span>
+                                    <FaEdit className="inline-block mr-2" /> Update
+                                </span>
+                            )}
+                        </button>
+                    
                     {error && <p className='text-red-500'>{error}</p>}
                     {updateSucess && <p className='text-green-500'>Profile Updated Sucessfully</p>}
 
