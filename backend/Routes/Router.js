@@ -14,8 +14,8 @@ router.get('/test' , userController);
 
 
  // AUTH ROUTES
-router.post('/signup' , signUp );
-router.post('/signIn' , signIn );
+router.post('/signup' , signUp);
+router.post('/signIn' , signIn);
 router.get('/signOut' ,   SignOut);
 
 // USER ROUTES

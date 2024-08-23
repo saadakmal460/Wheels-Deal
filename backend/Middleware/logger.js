@@ -4,7 +4,7 @@ exports.Logger = (err,req,res,next) =>{
     const error = err.message || "Internal Server Error";
 
     return res.status(status).json({
-        sucess:false,
+        success:false,
         status,
         error
     })

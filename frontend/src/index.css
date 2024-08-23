@@ -110,9 +110,14 @@ body {
 }
 
 .card1 {
-  border: 1px solid #54b4d3;
+  border: 1px solid #1ca9c9;
 }
 
 .iconButton{
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+}
+
+.message{
+  margin-top: -18px;
+
 }

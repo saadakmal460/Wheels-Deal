@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInFailure, signInSuccess } from '../../Redux/User/UserSlice';
 import { FaSignInAlt, FaSpinner , FaUserCircle } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
@@ -30,29 +32,40 @@ const SignIn = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        dispatch(signInFailure(errorData.error?.message || 'An error occurred'));
-        return;
-      }
-
       const data = await res.json();
+      console.log(data)
 
-      if (data.success === false) {
-        dispatch(signInFailure(data.error?.message || 'Sign in failed'));
+
+      if (data.success == false) {
+        dispatch(signInFailure(data.error));
+        
+        toast.error(data.error, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+      });
+      
         return;
       }
 
       dispatch(signInSuccess(data));
       navigate('/');
+
     } catch (error) {
+      console.log(error);
+
       dispatch(signInFailure(error.message || 'An unexpected error occurred'));
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 md:px-8">
-      <div className="p-6 sm:p-8 md:p-10 max-w-md md:max-w-lg lg:max-w-xl w-full shadow-lg rounded-lg bg-white relative card">
+      <ToastContainer />
+      <div className="p-6 sm:p-8 md:p-10 max-w-md md:max-w-lg lg:max-w-xl w-full shadow-lg rounded-lg bg-white relative card card1">
         <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white rounded-full p-3 shadow-lg">
           <FaUserCircle className="text-custom-blue text-6xl" />
         </div>
@@ -95,7 +108,7 @@ const SignIn = () => {
               Sign Up
             </Link>
           </div>
-          {error && <p className="text-red-500 text-center mt-4">{error.message || error}</p>}
+          
         </form>
       </div>
     </div>

@@ -8,8 +8,8 @@ export default {
     extend: {
       colors: {
         // Define your custom colors here
-        'custom-blue': '#54b4d3',
-        'blue-hover' : '#31a2c7',
+        'custom-blue': '#1ca9c9',
+        'blue-hover' : 'rgb(39 123 151)',
         'snow' : '#FFF'
 
       },

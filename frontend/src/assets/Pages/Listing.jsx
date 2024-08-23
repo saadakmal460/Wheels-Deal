@@ -369,7 +369,7 @@ const VehicleListing = () => {
                         <div className="bg-white shadow-md rounded-lg p-6 mb-6 card1">
                             <div className="flex items-center mb-4">
                                 <FaCar className="text-custom-blue text-2xl mr-2" />
-                                <h2 className="text-xl font-semibold text-custom-blue">Car Information</h2>
+                                <h2 className="text-xl font-semibold text-custom-blue">Vehicle Information</h2>
                             </div>
 
                             <div className="space-y-4">
@@ -386,7 +386,7 @@ const VehicleListing = () => {
                                             rounded-md focus:outline-none focus:ring-1 ${formError.make ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
                                             }`}
                                         style={{
-                                            border: formError.make ? '1px solid red' : formError.make === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                            border: formError.make ? '1px solid red' : formError.make === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                         }}
 
                                         required
@@ -412,7 +412,7 @@ const VehicleListing = () => {
                                             rounded-md focus:outline-none focus:ring-1 ${formError.model ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
                                             }`}
                                         style={{
-                                            border: formError.model ? '1px solid red' : formError.model === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                            border: formError.model ? '1px solid red' : formError.model === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                         }}
                                         required
                                     />
@@ -441,7 +441,7 @@ const VehicleListing = () => {
                                             rounded-md focus:outline-none focus:ring-1 ${formError.year ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
                                             }`}
                                         style={{
-                                            border: formError.year ? '1px solid red' : formError.year === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                            border: formError.year ? '1px solid red' : formError.year === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                         }}
                                         required
                                     />
@@ -466,7 +466,7 @@ const VehicleListing = () => {
                                         className={`block w-full px-4 py-2 text-black bg-white rounded-md focus:outline-none focus:ring-1 ${formError.mileage ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
                                             }`}
                                         style={{
-                                            border: formError.mileage ? '1px solid red' : formError.mileage === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                            border: formError.mileage ? '1px solid red' : formError.mileage === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                         }}
                                         required
                                     />
@@ -491,7 +491,7 @@ const VehicleListing = () => {
                                         className={`block w-full px-4 py-2 text-black bg-white rounded-md focus:outline-none focus:ring-1 ${formError.price ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
                                             }`}
                                         style={{
-                                            border: formError.price ? '1px solid red' : formError.price === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                            border: formError.price ? '1px solid red' : formError.price === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                         }}
                                         required
                                     />
@@ -517,7 +517,7 @@ const VehicleListing = () => {
                                             focus:outline-none focus:ring-1 ${formError.description ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
                                             }`}
                                         style={{
-                                            resize: 'none', border: formError.description ? '1px solid red' : formError.description === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                            resize: 'none', border: formError.description ? '1px solid red' : formError.description === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                         }}
                                         required
                                     ></textarea>
@@ -542,7 +542,7 @@ const VehicleListing = () => {
                                             onChange={handleInputChange}
                                             className={`w-4 h-4`}
                                             style={{
-                                                border: formError.condition ? '1px solid red' : formError.condition === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                                border: formError.condition ? '1px solid red' : formError.condition === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                             }}
                                             required
                                         />
@@ -615,7 +615,7 @@ const VehicleListing = () => {
                                             rounded-md focus:outline-none focus:ring-1 ${formError.fuelType ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
                                             }`}
                                         style={{
-                                            border: formError.fuelType ? '1px solid red' : formError.fuelType === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                            border: formError.fuelType ? '1px solid red' : formError.fuelType === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                         }}
                                         required
                                     >
@@ -730,7 +730,7 @@ const VehicleListing = () => {
                             <div className="space-y-4">
 
                                 <div className="mb-4">
-                                    <label className="block text-black mb-2" htmlFor="name">Seller Address</label>
+                                    <label className="block text-black mb-2" htmlFor="name">City</label>
                                     <input name="sellerAddress" id="address" type="text"
                                         value={formData.sellerAddress}
                                         onChange={handleInputChange}
@@ -738,7 +738,7 @@ const VehicleListing = () => {
                                         rounded-md focus:outline-none focus:ring-1 ${formError.sellerAddress ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
                                             }`}
                                         style={{
-                                            border: formError.sellerAddress ? '1px solid red' : formError.sellerAddress === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                            border: formError.sellerAddress ? '1px solid red' : formError.sellerAddress === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                         }}
                                         required />
                                     {formError.sellerAddress && (
@@ -750,7 +750,7 @@ const VehicleListing = () => {
                                 </div>
 
                                 <div className="mb-4">
-                                    <label className="block text-black mb-2" htmlFor="phone">Seller Phone</label>
+                                    <label className="block text-black mb-2" htmlFor="phone">Contact No</label>
                                     <input name="sellerContact" id="sellerContact" type="tel"
                                         value={formData.sellerContact}
                                         onChange={handleInputChange}
@@ -758,7 +758,7 @@ const VehicleListing = () => {
                                         rounded-md focus:outline-none focus:ring-1 ${formError.sellerContact ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
                                             }`}
                                         style={{
-                                            border: formError.sellerContact ? '1px solid red' : formError.sellerContact === '' ? '1px solid #0dd50d' : '1px solid #dee2e6'
+                                            border: formError.sellerContact ? '1px solid red' : formError.sellerContact === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
                                         }}
                                         required />
                                     {formError.sellerContact && (
@@ -794,7 +794,7 @@ const VehicleListing = () => {
                                 <button
                                     onClick={handleSubmit}
                                     disabled={loading}
-                                    className="bg-custom-blue text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-hover disabled:bg-blue-300 transition-colors duration-300 ease-in-out"
+                                    className="bg-custom-blue text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-hover disabled:bg-blue-hover transition-colors duration-300 ease-in-out"
                                 >
                                     {loading ? (
                                         <span>
