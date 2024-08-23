@@ -4,8 +4,9 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import { updateUserStart, updateUserFailure, updateUserSucess } from '../../Redux/User/UserSlice';
-import { FaEdit, FaSpinner } from 'react-icons/fa';
-
+import { FaEdit, FaSpinner, FaTrash } from 'react-icons/fa';
+import { Modal, Button } from 'react-bootstrap';
+import { deleteUserStart, deleteUserSucess, deleteUserFailure } from '../../Redux/User/UserSlice';
 const EditProfile = () => {
     const [formData, setFormData] = useState({});
     const { loading, error } = useSelector((state) => state.user);
@@ -19,6 +20,8 @@ const EditProfile = () => {
     const dispatch = useDispatch();
 
     const [updateSucess, setupdateSucess] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
 
 
@@ -101,6 +104,41 @@ const EditProfile = () => {
 
     }
 
+    const handleDelete = async () => {
+        setDeleting(true);
+        try {
+            dispatch(deleteUserStart());
+
+            const res = await fetch(`/api/deleteUser/${user._id}`, {
+                method: 'DELETE',
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                dispatch(deleteUserFailure(errorData.error));
+                return;
+            }
+
+            const data = await res.json();
+
+            if (data.success === false) {
+                dispatch(deleteUserFailure(data.error));
+                return;
+            }
+
+            dispatch(deleteUserSucess());
+            navigate('/');
+
+        } catch (error) {
+            dispatch(deleteUserFailure(error));
+        } finally {
+            setDeleting(false);
+            setShowModal(false);
+        }
+    };
+
+
+
     console.log(formData)
 
     return (
@@ -115,29 +153,57 @@ const EditProfile = () => {
                     <input type="text" className='border p-3 rounded-lg' placeholder='Username' id='username' defaultValue={user && user.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} />
                     <input type="email" className='border p-3 rounded-lg' placeholder='Email' id='email' defaultValue={user && user.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                     <input type="password" className='border p-3 rounded-lg' placeholder='Password' id='password' onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
-                    
-                        <button
-                            disabled={loading}
-                            onClick={handleSubmit}
-                            type="submit"
-                            className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600"
-                        >
-                            {loading ? (
-                                <span>
-                                    <FaSpinner className="inline-block mr-2 animate-spin" /> Updating
-                                </span>
-                            ) : (
-                                <span>
-                                    <FaEdit className="inline-block mr-2" /> Update
-                                </span>
-                            )}
-                        </button>
-                    
+
+                    <button
+                        disabled={loading}
+                        onClick={handleSubmit}
+                        type="submit"
+                        className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600"
+                    >
+                        {loading ? (
+                            <span>
+                                <FaSpinner className="inline-block mr-2 animate-spin" /> Updating
+                            </span>
+                        ) : (
+                            <span>
+                                <FaEdit className="inline-block mr-2" /> Update
+                            </span>
+                        )}
+                    </button>
+
+
+                    <button
+                        onClick={() => setShowModal(true)}
+                        className="flex items-center justify-center gap-2 flex-1 rounded-lg border-2 bg-red-600 text-white px-4 py-2"
+                        disabled={loading}
+                    >
+                        <FaTrash className="text-xl" />
+                        {loading ? 'Deleting.....' : 'Delete Profile'}
+                    </button>
+
+
                     {error && <p className='text-red-500'>{error}</p>}
                     {updateSucess && <p className='text-green-500'>Profile Updated Sucessfully</p>}
 
                 </form>
             </div>
+
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    <p>Are you sure you want to delete your profile? This action cannot be undone.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="danger" onClick={handleDelete} disabled={deleting}>
+                        {deleting ? 'Deleting...' : 'Delete'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
         </>
     )
