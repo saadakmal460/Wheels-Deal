@@ -3,7 +3,7 @@ const {userController , UpdateUser , deleteUser , getListing} = require('../Cont
 const {signUp} = require('../Controller/signUp.controller')
 const {signIn , SignOut} = require('../Controller/signIn.controller')
 const {verifyUser} = require('../Utils/verifyUser')
-const {Create, GetLisintg, DeleteListing, EditListing} = require('../Controller/listing.controller')
+const {Create, GetLisintg, DeleteListing, EditListing, AllListings} = require('../Controller/listing.controller')
 
 
 
@@ -30,6 +30,8 @@ router.post('/lsiting/create' , verifyUser , Create);
 router.get('/listing/:id' , verifyUser , GetLisintg);
 router.delete('/delete/:id' , verifyUser , DeleteListing);
 router.patch('/updateListing/:id' , verifyUser , EditListing);
+router.get('/listings'  , AllListings);
+
 
 
 

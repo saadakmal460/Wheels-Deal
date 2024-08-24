@@ -121,3 +121,64 @@ body {
   margin-top: -18px;
 
 }
+
+.card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-img-top {
+  transition: transform 0.5s ease;
+}
+
+.card-img-wrapper:hover .card-img-top {
+  transform: scale(1.1); /* Zoom effect */
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.card-text.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.icon-color-location {
+  color: #007bff; /* Blue color for location icon */
+}
+
+.icon-color-price {
+  color: #28a745; /* Green color for price icon */
+}
+
+.icon-color-condition {
+  color: #ffc107; /* Yellow color for condition icon */
+}
+
+.icon-color-transmission {
+  color: #dc3545; /* Red color for transmission icon */
+}
+.text-decoration-none {
+  text-decoration: none;
+  color: inherit; /* Make sure the text color is inherited */
+}
+
+.card-hover {
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important; 
+
+}
+
+/* Increased shadow on hover */
+.card-hover:hover {
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+.shadow-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 2rem 0;
+}
+

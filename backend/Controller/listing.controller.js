@@ -56,4 +56,15 @@ const EditListing = async (req, res, next) => {
     }
 };
 
-module.exports = { Create, GetLisintg, DeleteListing, EditListing }
+const AllListings = async (req,res,next)=>{
+    try {
+        const listings = await VehicleListingModel.find();
+
+        return res.status(200).json(listings);
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = { Create, GetLisintg, DeleteListing, EditListing , AllListings }
