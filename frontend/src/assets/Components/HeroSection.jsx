@@ -29,22 +29,22 @@ const HeroSection = () => {
               From checkout to global sales tax compliance, companies around the world use Flowbite to simplify their payment stack.
             </p>
             <Link to={user ? '/listing' : '/signUp'}>
-            <button
+    <button
+        className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white bg-custom-blue hover:bg-blue-hover rounded-lg focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+    >
+        {user ? 'Post Ad' : 'Get Started'}
+    </button>
+</Link>
 
-              className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center bg-custom-blue text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
-            >
-              {user ? 'Post Ad' : 'Get Started'}
-            </button>
-            </Link>
+<Link to={user ? '/search' : '/signUp'}>
+    <button
+        className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center bg-white text-black border border-transparent rounded-lg hover:bg-custom-blue hover:text-white hover:border-gray-800 hover:shadow-lg transition-all duration-300 ease-in-out focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+    >
+        {user ? 'Find' : 'Find'}
+    </button>
+</Link>
 
-            <Link to={user ? '/listing' : '/signUp'}>
-            <button
 
-              className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center bg-custom-blue text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
-            >
-              {user ? 'Find' : 'Find'}
-            </button>
-            </Link>
 
           </div>
           <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">

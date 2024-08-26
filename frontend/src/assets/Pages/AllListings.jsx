@@ -3,11 +3,11 @@ import { FaMapMarkerAlt, FaDollarSign, FaCar, FaCogs } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Loader from '../Components/Loader';
 
-
 const AllListings = () => {
     const [listings, setListings] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [visibleListings, setVisibleListings] = useState(5); // Initial number of listings to show
 
     useEffect(() => {
         const fetchListings = async () => {
@@ -41,6 +41,10 @@ const AllListings = () => {
 
     }, []);
 
+    const loadMoreListings = () => {
+        setVisibleListings(prev => prev + 5); // Increase by 5 when "View More" is clicked
+    };
+
     if (loading) return <Loader/>;
     if (error) return <p>Error: {error}</p>;
 
@@ -48,7 +52,7 @@ const AllListings = () => {
         <div className="container mt-4">
             <h3>Popular Posts</h3>
             <div className="row g-3 mb-3">
-                {listings.map((listing) => (
+                {listings.slice(0, visibleListings).map((listing) => (
                     <div className="col-md-4" key={listing._id}>
                         <Link to={`/listing/${listing._id}`} className="text-decoration-none">
                             <div
@@ -104,6 +108,13 @@ const AllListings = () => {
                     </div>
                 ))}
             </div>
+            {visibleListings < listings.length && (
+                <div className="text-center">
+                    <button className="btn btn-primary mt-3" onClick={loadMoreListings}>
+                        View More
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

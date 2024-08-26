@@ -12,6 +12,7 @@ import Listing from './assets/Pages/Listing';
 import ShowListings from './assets/Pages/ShowListings';
 import UserIndiviualListing from './assets/Pages/UserIndiviualListing';
 import EditListing from './assets/Pages/EditListing';
+import Search from './assets/Pages/Search';
 
 
 
@@ -29,6 +30,8 @@ const App = () => {
           <Route path='/myListings' element={<ShowListings />} />
           <Route path='/listing/:id' element={<UserIndiviualListing />} />
           <Route path='/editList/:id' element={<EditListing />} />
+          <Route path='/search' element={<Search />} />
+
 
 
         </Route>
