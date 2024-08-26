@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaMapMarkerAlt, FaDollarSign, FaCar, FaCogs } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaDollarSign, FaCar, FaCogs, FaCalendar, FaCalendarAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Loader from '../Components/Loader';
 
@@ -83,10 +83,13 @@ const AllListings = () => {
                                     <h5 className="card-title mb-3 capitalize">
                                         {`${listing.make} ${listing.model}`}
                                     </h5>
-                                    <p className="card-text mb-3 truncate">{listing.description}</p>
                                     <div className="d-flex align-items-center mb-2">
                                         <FaMapMarkerAlt className="me-2 icon-color-location" />
                                         <p className="mb-0 capitalize">{listing.sellerAddress}</p>
+                                    </div>
+                                    <div className="d-flex align-items-center mb-2">
+                                        <FaCalendarAlt className="me-2" />
+                                        <p className="mb-0 capitalize">{listing.year}</p>
                                     </div>
                                     <div className="d-flex align-items-center mb-2">
                                         <FaDollarSign className="me-2 icon-color-price" />
@@ -102,19 +105,14 @@ const AllListings = () => {
                                             <p className="mb-0 capitalize">{listing.transmission}</p>
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </Link>
                     </div>
                 ))}
             </div>
-            {visibleListings < listings.length && (
-                <div className="text-center">
-                    <button className="btn btn-primary mt-3" onClick={loadMoreListings}>
-                        View More
-                    </button>
-                </div>
-            )}
+
         </div>
     );
 };

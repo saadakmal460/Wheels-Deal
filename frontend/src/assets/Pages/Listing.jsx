@@ -393,10 +393,11 @@ const VehicleListing = () => {
                                     />
                                     {formError.make && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.make}</p>
+                                            <FaExclamationCircle className="text-red-500 mr-2" style={{ fontSize: '1rem' }} />
+                                            <p className="text-red-500 text-sm m-0">{formError.make}</p>
                                         </div>
                                     )}
+
                                 </div>
 
                                 <div className="mb-4">
@@ -418,8 +419,8 @@ const VehicleListing = () => {
                                     />
                                     {formError.model && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.model}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.model}</p>
                                         </div>
                                     )}
                                 </div>
@@ -447,8 +448,8 @@ const VehicleListing = () => {
                                     />
                                     {formError.year && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.year}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.year}</p>
                                         </div>
                                     )}
                                 </div>
@@ -472,8 +473,8 @@ const VehicleListing = () => {
                                     />
                                     {formError.mileage && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.mileage}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.mileage}</p>
                                         </div>
                                     )}
                                 </div>
@@ -497,8 +498,8 @@ const VehicleListing = () => {
                                     />
                                     {formError.price && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.price}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.price}</p>
                                         </div>
                                     )}
                                 </div>
@@ -523,8 +524,8 @@ const VehicleListing = () => {
                                     ></textarea>
                                     {formError.description && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.description}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.description}</p>
                                         </div>
                                     )}
                                 </div>
@@ -561,8 +562,8 @@ const VehicleListing = () => {
                                     </div>
                                     {formError.condition && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.condition}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.condition}</p>
                                         </div>
                                     )}
                                 </div>
@@ -596,8 +597,8 @@ const VehicleListing = () => {
                                     </div>
                                     {formError.transmission && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.transmission}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.transmission}</p>
                                         </div>
                                     )}
                                 </div>
@@ -627,15 +628,15 @@ const VehicleListing = () => {
                                     </select>
                                     {formError.fuelType && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.fuelType}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.fuelType}</p>
                                         </div>
                                     )}
                                 </div>
                             </div>
 
                             <div className="flex justify-end mt-8">
-                            
+
                                 <button type="button" className="px-4 py-2 bg-custom-blue text-white rounded-lg hover:bg-blue-hover disabled:bg-blue-300 transition-colors duration-200 ease-in-out" onClick={handleNext}>
                                     Next <FaArrowRight className="inline-block mr-2 iconButton" />
                                 </button>
@@ -669,8 +670,8 @@ const VehicleListing = () => {
                                 </div>
                                 {formError.imageUrls && (
                                     <div className="text-red-500 text-sm flex items-center mt-1">
-                                        <FaExclamationCircle className="mr-2" />
-                                        <p className="text-red-500 text-sm">{formError.imageUrls}</p>
+                                        <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                        <p className="text-red-500 text-sm m-0">{formError.imageUrls}</p>
                                     </div>
                                 )}
 
@@ -691,8 +692,8 @@ const VehicleListing = () => {
 
                             {imageError && (
                                 <div className=" text-red-500 text-xs flex items-center mt-1">
-                                    <FaExclamationCircle className="mr-1" />
-                                    <p className="text-red-500 text-xs">{imageError}</p>
+                                    <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-1" />
+                                    <p className="text-red-500 text-xs m-0">{imageError}</p>
                                 </div>
                             )}
 
@@ -710,11 +711,11 @@ const VehicleListing = () => {
 
                             <div className="flex justify-between mt-8">
                                 <button type="button" className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 ease-in-out" onClick={handleBack}>
-                                <FaArrowLeft className="inline-block mr-2 iconButton" />Back
-                                    
+                                    <FaArrowLeft className="inline-block mr-2 iconButton" />Back
+
                                 </button>
                                 <button type="button" className="px-4 py-2 bg-custom-blue text-white rounded-lg hover:bg-blue-hover disabled:bg-blue-300 transition-colors duration-200 ease-in-out" onClick={handleNext}>
-                                Next <FaArrowRight className="inline-block mr-2 iconButton" />
+                                    Next <FaArrowRight className="inline-block mr-2 iconButton" />
                                 </button>
                             </div>
                         </div>
@@ -743,8 +744,8 @@ const VehicleListing = () => {
                                         required />
                                     {formError.sellerAddress && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.sellerAddress}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.sellerAddress}</p>
                                         </div>
                                     )}
                                 </div>
@@ -763,8 +764,8 @@ const VehicleListing = () => {
                                         required />
                                     {formError.sellerContact && (
                                         <div className="text-red-500 text-sm flex items-center mt-1">
-                                            <FaExclamationCircle className="mr-2" />
-                                            <p className="text-red-500 text-sm">{formError.sellerContact}</p>
+                                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                                            <p className="text-red-500 text-sm m-0">{formError.sellerContact}</p>
                                         </div>
                                     )}
                                 </div>
@@ -772,11 +773,11 @@ const VehicleListing = () => {
 
                             <div className="flex justify-between mt-8">
                                 <button type="button" className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 ease-in-out" onClick={handleBack}>
-                                <FaArrowLeft className="inline-block mr-2 iconButton" />Back
-                                    
+                                    <FaArrowLeft className="inline-block mr-2 iconButton" />Back
+
                                 </button>
                                 <button type="button" className="px-4 py-2 bg-custom-blue text-white rounded-lg hover:bg-blue-hover disabled:bg-blue-300 transition-colors duration-200 ease-in-out" onClick={handleNext}>
-                                Next <FaArrowRight className="inline-block mr-2 iconButton" />
+                                    Next <FaArrowRight className="inline-block mr-2 iconButton" />
                                 </button>
                             </div>
                         </div>
@@ -802,14 +803,14 @@ const VehicleListing = () => {
                                         </span>
                                     ) : (
                                         <span>
-                                            Submit <FaArrowRight className="inline-block mr-2" /> 
+                                            Submit <FaArrowRight className="inline-block mr-2" />
                                         </span>
                                     )}
                                 </button>
                             </div>
                             <div className="flex justify-between mt-8">
                                 <button type="button" className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 ease-in-out" onClick={handleBack}>
-                                <FaArrowLeft className="inline-block mr-2 iconButton" />Back                                    
+                                    <FaArrowLeft className="inline-block mr-2 iconButton" />Back
                                 </button>
 
                             </div>

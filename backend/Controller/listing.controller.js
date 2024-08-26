@@ -86,53 +86,41 @@ const FilteredListing = async (req, res, next) => {
             condition = '',
             transmission = '',
             fuelType = '',
-            location = ''
+            location = '',
+            year = null,
         } = req.query;
 
-        // Initialize query object
+        
         const query = {};
 
-        // Handle search term
+        
         if (search) {
-            const { make, model } = parseSearchTerm(search);
-            const searchRegex = new RegExp(search, 'i'); // Case-insensitive search
+            
+            const searchKeywords = search.split(' ').map(keyword => keyword.trim()); 
 
-            const orConditions = [];
+            
+            const orConditions = searchKeywords.map(keyword => ({
+                $or: [
+                    { make: { $regex: new RegExp(keyword, 'i') } }, 
+                    { model: { $regex: new RegExp(keyword, 'i') } } 
+                ]
+            }));
 
-            // Add conditions to $or array if they are defined
-            if (make) {
-                orConditions.push({ make: { $regex: make, $options: 'i' } });
-            }
-
-            if (model) {
-                orConditions.push({ model: { $regex: model, $options: 'i' } });
-            }
-
-            // Always include description and sellerAddress search
-            orConditions.push(
-                { description: searchRegex },
-                { sellerAddress: searchRegex }
-            );
-
-            if (orConditions.length > 0) {
-                query.$or = orConditions;
-            }
+            
+            query.$and = orConditions;
         }
 
-        // Handle price range
+        
         if (minPrice || maxPrice) {
-            // Convert to numbers and apply defaults if necessary
             const min = minPrice ? parseFloat(minPrice) : 0;
             const max = maxPrice ? parseFloat(maxPrice) : Number.MAX_SAFE_INTEGER;
 
-            // Ensure min is less than or equal to max
             if (min <= max) {
                 query.price = {
                     $gte: min,
                     $lte: max
                 };
             } else {
-                // If minPrice is greater than maxPrice, return an empty result
                 query.price = {
                     $gte: 0,
                     $lte: 0
@@ -140,7 +128,12 @@ const FilteredListing = async (req, res, next) => {
             }
         }
 
-        // Handle other filters
+        
+        if (year) {
+            query.year = year;
+        }
+
+        
         if (condition) {
             query.condition = condition;
         }
@@ -153,25 +146,26 @@ const FilteredListing = async (req, res, next) => {
             query.fuelType = fuelType;
         }
 
+        
         if (location) {
-            query.location = { $regex: location, $options: 'i' }; // Case-insensitive search
+            const locationRegex = new RegExp(location, 'i');
+            query.sellerAddress = { $regex: locationRegex };
         }
 
-        // Debugging: Log the query object
-        console.log('Query Object:', query);
 
-        // Fetch listings from the database
         const listings = await VehicleListingModel.find(query);
 
-        // Debugging: Log the number of results
-        console.log('Number of Listings Found:', listings.length);
-
-        // Return the listings
         res.json({ success: true, data: listings });
     } catch (error) {
         console.error('Error fetching listings:', error);
         res.status(500).json({ success: false, error: 'Server error' });
     }
-}
+};
+
+
+
+
+
+
 
 module.exports = { Create, GetLisintg, DeleteListing, EditListing, AllListings, FilteredListing }
