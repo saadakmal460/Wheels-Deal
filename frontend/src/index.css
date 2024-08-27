@@ -181,4 +181,22 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 2rem 0;
 }
+.custom-dropdown-menu {
+  min-width: 250px !important ;/* Set the minimum width */
+  padding: 10px; /* Add some padding for space */
+  border-radius: 12px; /* Rounded corners for a smoother look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+}
+
+.list{
+
+  padding-left: 0 !important;
+
+}
+
+
+.items:hover{
+  background-color: rgb(233 235 237) !important;
+  text-decoration: none;
+}
 

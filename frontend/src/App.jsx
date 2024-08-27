@@ -13,12 +13,15 @@ import ShowListings from './assets/Pages/ShowListings';
 import UserIndiviualListing from './assets/Pages/UserIndiviualListing';
 import EditListing from './assets/Pages/EditListing';
 import Search from './assets/Pages/Search';
+import SideBar from './assets/Components/SideBar';
 
 
 
 const App = () => {
   return (
     <BrowserRouter>
+
+      
       <Navbar1 />
       <Routes>
         <Route path='/' element={<Home />} />

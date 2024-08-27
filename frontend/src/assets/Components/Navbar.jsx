@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // Import useLocation
 import { useSelector, useDispatch } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { signOutStart, signOutSucess, signOutFailure } from '../../Redux/User/UserSlice';
-import { FaList, FaUserEdit, FaUserTimes, FaSignOutAlt, FaSignInAlt } from 'react-icons/fa';
+import { FaList, FaUserEdit, FaUserTimes, FaSignOutAlt, FaSignInAlt, FaHome, FaPlus, FaBars } from 'react-icons/fa'; // Import FaBars for burger button
+import SideBar from './SideBar';
+import Loader from './Loader';
 
 const Navbar1 = () => {
-    const { currentUser, loading, error } = useSelector((state) => state.user);
+    const { currentUser, loading } = useSelector((state) => state.user);
     const [user, setUser] = useState(null);
-
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar visibility
+    const location = useLocation(); // Hook to get the current location
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -28,15 +29,21 @@ const Navbar1 = () => {
         resolveUser();
     }, [currentUser]);
 
+    useEffect(() => {
+        // Close sidebar on route change
+        setIsSidebarOpen(false);
+    }, [location]);
 
     const handleLogOut = async () => {
         try {
+
+            
             dispatch(signOutStart());
 
             const res = await fetch('/api/signOut');
 
             if (!res.ok) {
-                console.log(res)
+                console.log(res);
                 const errorData = await res.json();
                 dispatch(signOutFailure(errorData.error));
                 return;
@@ -44,8 +51,7 @@ const Navbar1 = () => {
 
             const data = await res.json();
 
-            if (data.sucess === false) {
-
+            if (data.success === false) {
                 dispatch(signOutFailure(data.error));
                 return;
             }
@@ -53,63 +59,68 @@ const Navbar1 = () => {
             dispatch(signOutSucess());
 
         } catch (error) {
-            dispatch(signOutFailure(data.error));
+            dispatch(signOutFailure(error.message));
         }
-    }
+    };
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    useEffect(() => {
+        // Close sidebar when clicking outside
+        const handleClickOutside = (event) => {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar && !sidebar.contains(event.target) && isSidebarOpen) {
+                setIsSidebarOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isSidebarOpen]);
+
+    if(loading) return <Loader/>
 
     return (
-        <Navbar expand="lg" className="bg-body-tertiary navContainer">
-            <Container fluid>
-                <Navbar.Brand href="#">NAPAK WHEELS</Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbarScroll" />
-                <Navbar.Collapse id="navbarScroll">
-                    <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
-                        <Nav.Link as={Link} to="/" className="me-3">Home</Nav.Link>
-                        <Nav.Link as={Link} to="/about" className="me-3">About</Nav.Link>
+        <>
+            <Navbar expand="lg" className="bg-body-tertiary navContainer">
+                <Container fluid>
+                    <Navbar.Brand href="#">
+                        WHEELS DEAL
+                    </Navbar.Brand>
+
+                    <div className="d-flex align-items-center ms-auto">
                         {user ? (
-                            <Nav.Link as={Link} to="/listing" className="me-3">Add Your Post</Nav.Link>
-                        ) : <></>}
-                    </Nav>
-                    {user ? (
-                        <Dropdown align="end" className="ms-3">
-                            <Dropdown.Toggle
-                                as={Nav.Link}
-                                className="d-flex align-items-center"
-                                id="dropdown-custom-components"
-                            >
-                                <img
-                                    className='rounded-full h-7 w-7 object-cover'
-                                    src={user.avatar}
-                                    alt='Profile'
+                            <>
+                                <button
+                                    type="button"
+                                    className="d-flex align-items-center p-2 me-3"
+                                    onClick={toggleSidebar} // Toggle sidebar on click
+                                >
+                                    <FaBars />
+                                </button>
+
+                                <SideBar
+                                    isOpen={isSidebarOpen}
+                                    toggleSidebar={toggleSidebar}
+                                    handleLogOut={handleLogOut}
                                 />
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="dropdown-menu-right" style={{ minWidth: '200px', borderRadius: '12px' }}>
-                                <Dropdown.Item as={Link} to="/myListings" className="d-flex align-items-center">
-                                    <FaList className="me-2" /> <span>My Listings</span>
-                                </Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/editProfile" className="d-flex align-items-center">
-                                    <FaUserEdit className="me-2" /> <span>Edit Profile</span>
-                                </Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/profile" className="d-flex align-items-center">
-                                    <FaUserTimes className="me-2" /> <span>Delete Profile</span>
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={handleLogOut} className="d-flex align-items-center">
-                                    <FaSignOutAlt className="me-2" /> <span>{loading ? 'Signing Out' : 'Sign Out'}</span>
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-
-                    ) : (
-                        <Nav style={{ maxHeight: '100px' }} navbarScroll>
-                            <Nav.Link as={Link} to="/signIn" className="me-3 d-flex align-items-center">
-                                <FaSignInAlt className="me-2" /> Sign In
-                            </Nav.Link>
-                        </Nav>
-                    )}
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+                            </>
+                        ) : (
+                            <Nav style={{ maxHeight: '100px' }} navbarScroll>
+                                <Nav.Link as={Link} to="/signIn" className="me-3 d-flex align-items-center">
+                                    <FaSignInAlt className="me-2" /> Sign In
+                                </Nav.Link>
+                            </Nav>
+                        )}
+                    </div>
+                </Container>
+            </Navbar>
+            {/* Pass state and toggle function */}
+        </>
     );
 }
 
