@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link, useLocation } from 'react-router-dom'; // Import useLocation
+import { Link, useNavigate , useLocation } from 'react-router-dom'; // Import useLocation
 import { useSelector, useDispatch } from 'react-redux';
-import Dropdown from 'react-bootstrap/Dropdown';
-import { signOutStart, signOutSucess, signOutFailure } from '../../Redux/User/UserSlice';
-import { FaList, FaUserEdit, FaUserTimes, FaSignOutAlt, FaSignInAlt, FaHome, FaPlus, FaBars } from 'react-icons/fa'; // Import FaBars for burger button
+import { FaBars, FaSignInAlt } from 'react-icons/fa'; // Import FaBars for burger button
 import SideBar from './SideBar';
 import Loader from './Loader';
+import { signOutStart, signOutSucess, signOutFailure } from '../../Redux/User/UserSlice';
 
 const Navbar1 = () => {
     const { currentUser, loading } = useSelector((state) => state.user);
@@ -16,6 +15,8 @@ const Navbar1 = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar visibility
     const location = useLocation(); // Hook to get the current location
     const dispatch = useDispatch();
+    const navigate=  useNavigate();
+    
 
     useEffect(() => {
         const resolveUser = async () => {
@@ -36,8 +37,6 @@ const Navbar1 = () => {
 
     const handleLogOut = async () => {
         try {
-
-            
             dispatch(signOutStart());
 
             const res = await fetch('/api/signOut');
@@ -57,21 +56,24 @@ const Navbar1 = () => {
             }
 
             dispatch(signOutSucess());
-
+            navigate('/')
         } catch (error) {
             dispatch(signOutFailure(error.message));
         }
     };
 
     const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
+        setIsSidebarOpen((prevState) => !prevState);
     };
 
     useEffect(() => {
         // Close sidebar when clicking outside
         const handleClickOutside = (event) => {
             const sidebar = document.querySelector('.sidebar');
-            if (sidebar && !sidebar.contains(event.target) && isSidebarOpen) {
+            const burgerButton = document.querySelector('.fa-bars'); // Get the burger button element
+
+            // Check if the sidebar is open, and the click target is outside the sidebar and not the burger button
+            if (isSidebarOpen && sidebar && !sidebar.contains(event.target) && !burgerButton.contains(event.target)) {
                 setIsSidebarOpen(false);
             }
         };
@@ -82,7 +84,7 @@ const Navbar1 = () => {
         };
     }, [isSidebarOpen]);
 
-    if(loading) return <Loader/>
+    if (loading) return <Loader />;
 
     return (
         <>
@@ -107,6 +109,7 @@ const Navbar1 = () => {
                                     isOpen={isSidebarOpen}
                                     toggleSidebar={toggleSidebar}
                                     handleLogOut={handleLogOut}
+                                    img= {user.avatar}
                                 />
                             </>
                         ) : (
@@ -119,9 +122,8 @@ const Navbar1 = () => {
                     </div>
                 </Container>
             </Navbar>
-            {/* Pass state and toggle function */}
         </>
     );
-}
+};
 
 export default Navbar1;

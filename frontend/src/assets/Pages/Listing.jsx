@@ -363,13 +363,13 @@ const VehicleListing = () => {
         <>
 
             <main className="p-3 max-w-4xl mx-auto">
-                <h1 className="text-2xl font-bold text-custom-blue capitalize mb-4">Post Your Vehicle</h1>
+                <h1 className="text-2xl font-bold text-black capitalize mb-4">Post Your Vehicle</h1>
                 <form onSubmit={handleSubmit}>
                     {currentStep === 1 && (
                         <div className="bg-white shadow-md rounded-lg p-6 mb-6 card1">
                             <div className="flex items-center mb-4">
-                                <FaCar className="text-custom-blue text-2xl mr-2" />
-                                <h2 className="text-xl font-semibold text-custom-blue">Vehicle Information</h2>
+                                <FaCar className="text-BLACK text-2xl mr-2" />
+                                <h2 className="text-xl font-semibold text-black">Vehicle Information</h2>
                             </div>
 
                             <div className="space-y-4">
@@ -383,10 +383,10 @@ const VehicleListing = () => {
                                         onBlur={handleBlur}
                                         onChange={handleInputChange}
                                         className={`block w-full px-4 py-2 text-black bg-white 
-                                            rounded-md focus:outline-none focus:ring-1 ${formError.make ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+                                            rounded-md focus:outline-none focus:ring-1 ${formError.make ? 'focus:ring-red-500' : 'focus:ring-gray-500'
                                             }`}
                                         style={{
-                                            border: formError.make ? '1px solid red' : formError.make === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                            border: formError.make ? '1px solid red' : formError.make === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                         }}
 
                                         required
@@ -410,10 +410,10 @@ const VehicleListing = () => {
                                         onBlur={handleBlur}
                                         onChange={handleInputChange}
                                         className={`block w-full px-4 py-2 text-black bg-white
-                                            rounded-md focus:outline-none focus:ring-1 ${formError.model ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+                                            rounded-md focus:outline-none focus:ring-1 ${formError.model ? 'focus:ring-red-500' : 'focus:ring-gray-500'
                                             }`}
                                         style={{
-                                            border: formError.model ? '1px solid red' : formError.model === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                            border: formError.model ? '1px solid red' : formError.model === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                         }}
                                         required
                                     />
@@ -439,10 +439,10 @@ const VehicleListing = () => {
                                         onBlur={handleBlur}
                                         onChange={handleInputChange}
                                         className={`block w-full px-4 py-2 text-black bg-white
-                                            rounded-md focus:outline-none focus:ring-1 ${formError.year ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+                                            rounded-md focus:outline-none focus:ring-1 ${formError.year ? 'focus:ring-red-500' : 'focus:ring-gray-500'
                                             }`}
                                         style={{
-                                            border: formError.year ? '1px solid red' : formError.year === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                            border: formError.year ? '1px solid red' : formError.year === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                         }}
                                         required
                                     />
@@ -464,10 +464,10 @@ const VehicleListing = () => {
                                         value={formData.mileage}
                                         onBlur={handleBlur}
                                         onChange={handleInputChange}
-                                        className={`block w-full px-4 py-2 text-black bg-white rounded-md focus:outline-none focus:ring-1 ${formError.mileage ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+                                        className={`block w-full px-4 py-2 text-black bg-white rounded-md focus:outline-none focus:ring-1 ${formError.mileage ? 'focus:ring-red-500' : 'focus:ring-gray-500'
                                             }`}
                                         style={{
-                                            border: formError.mileage ? '1px solid red' : formError.mileage === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                            border: formError.mileage ? '1px solid red' : formError.mileage === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                         }}
                                         required
                                     />
@@ -489,10 +489,10 @@ const VehicleListing = () => {
                                         value={formData.price}
                                         onBlur={handleBlur}
                                         onChange={handleInputChange}
-                                        className={`block w-full px-4 py-2 text-black bg-white rounded-md focus:outline-none focus:ring-1 ${formError.price ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+                                        className={`block w-full px-4 py-2 text-black bg-white rounded-md focus:outline-none focus:ring-1 ${formError.price ? 'focus:ring-red-500' : 'focus:ring-gray-500'
                                             }`}
                                         style={{
-                                            border: formError.price ? '1px solid red' : formError.price === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                            border: formError.price ? '1px solid red' : formError.price === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                         }}
                                         required
                                     />
@@ -515,10 +515,10 @@ const VehicleListing = () => {
                                         onChange={handleInputChange}
                                         rows="7"
                                         className={`block w-full p-2.5 text-sm text-black rounded-lg 
-                                            focus:outline-none focus:ring-1 ${formError.description ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+                                            focus:outline-none focus:ring-1 ${formError.description ? 'focus:ring-red-500' : 'focus:ring-gray-500'
                                             }`}
                                         style={{
-                                            resize: 'none', border: formError.description ? '1px solid red' : formError.description === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                            resize: 'none', border: formError.description ? '1px solid red' : formError.description === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                         }}
                                         required
                                     ></textarea>
@@ -543,7 +543,7 @@ const VehicleListing = () => {
                                             onChange={handleInputChange}
                                             className={`w-4 h-4`}
                                             style={{
-                                                border: formError.condition ? '1px solid red' : formError.condition === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                                border: formError.condition ? '1px solid red' : formError.condition === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                             }}
                                             required
                                         />
@@ -613,10 +613,10 @@ const VehicleListing = () => {
                                         onBlur={handleBlur}
                                         onChange={handleInputChange}
                                         className={`block w-full px-4 py-2 text-black bg-white
-                                            rounded-md focus:outline-none focus:ring-1 ${formError.fuelType ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+                                            rounded-md focus:outline-none focus:ring-1 ${formError.fuelType ? 'focus:ring-red-500' : 'focus:ring-gray-500'
                                             }`}
                                         style={{
-                                            border: formError.fuelType ? '1px solid red' : formError.fuelType === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                            border: formError.fuelType ? '1px solid red' : formError.fuelType === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                         }}
                                         required
                                     >
@@ -736,10 +736,10 @@ const VehicleListing = () => {
                                         value={formData.sellerAddress}
                                         onChange={handleInputChange}
                                         className={`block w-full px-4 py-2 text-black bg-white
-                                        rounded-md focus:outline-none focus:ring-1 ${formError.sellerAddress ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+                                        rounded-md focus:outline-none focus:ring-1 ${formError.sellerAddress ? 'focus:ring-red-500' : 'focus:ring-gray-500'
                                             }`}
                                         style={{
-                                            border: formError.sellerAddress ? '1px solid red' : formError.sellerAddress === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                            border: formError.sellerAddress ? '1px solid red' : formError.sellerAddress === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                         }}
                                         required />
                                     {formError.sellerAddress && (
@@ -756,10 +756,10 @@ const VehicleListing = () => {
                                         value={formData.sellerContact}
                                         onChange={handleInputChange}
                                         className={`block w-full px-4 py-2 text-black bg-white
-                                        rounded-md focus:outline-none focus:ring-1 ${formError.sellerContact ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+                                        rounded-md focus:outline-none focus:ring-1 ${formError.sellerContact ? 'focus:ring-red-500' : 'focus:ring-gray-500'
                                             }`}
                                         style={{
-                                            border: formError.sellerContact ? '1px solid red' : formError.sellerContact === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+                                            border: formError.sellerContact ? '1px solid red' : formError.sellerContact === '' ? '1px solid #0dd50d' : '1px solid rgb(144 136 136)'
                                         }}
                                         required />
                                     {formError.sellerContact && (

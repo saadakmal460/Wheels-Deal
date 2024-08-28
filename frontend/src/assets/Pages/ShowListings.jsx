@@ -110,16 +110,16 @@ const ShowListings = () => {
 
             {listings && listings.length > 0 ? (
                 <div className="container mx-auto px-4">
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center no-underline">
                         {listings.map((listing) => (
-                            <div key={listing._id} className="w-full max-w-2xl bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4 p-4 flex flex-col sm:flex-row items-center">
+                            <div key={listing._id} className="w-full max-w-2xl bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4 p-4 flex flex-col sm:flex-row items-center no-underline">
                                 <img
                                     className="w-24 h-24 rounded object-cover mr-4"
                                     src={listing.imageUrls[0] || '/docs/images/blog/image-1.jpg'}
                                     alt=""
                                 />
-                                <div className="flex-grow">
-                                    <Link to={`/listing/${listing._id}`}>
+                                <div className="flex-grow no-underline">
+                                    <Link to={`/listing/${listing._id}`} className='no-underline'>
                                         <h5 className="text-xl font-bold tracking-tight text-black">
                                             {listing.make + " " + listing.model}
                                         </h5>

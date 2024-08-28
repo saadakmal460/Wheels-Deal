@@ -4,11 +4,12 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import { updateUserStart, updateUserFailure, updateUserSucess } from '../../Redux/User/UserSlice';
-import { FaEdit, FaSpinner, FaTrash } from 'react-icons/fa';
-import { Modal, Button } from 'react-bootstrap';
-import { deleteUserStart, deleteUserSucess, deleteUserFailure } from '../../Redux/User/UserSlice';
+import { FaEdit, FaExclamationCircle, FaSpinner } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const EditProfile = () => {
-    const [formData, setFormData] = useState({});
+    
     const { loading, error } = useSelector((state) => state.user);
     const [fileProgress, setFileProgress] = useState(0);
     const [fileUploadError, setFileUploadError] = useState(null);
@@ -18,21 +19,26 @@ const EditProfile = () => {
     const [file, setFile] = useState(undefined);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
     const [updateSucess, setupdateSucess] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [deleting, setDeleting] = useState(false);
-
+    const [formError, setFormError] = useState({});
+    const [formData, setFormData] = useState({
+        'username': '',
+        'email': '',
+        'password': ''
+    });
 
 
     useEffect(() => {
         const resolveUser = async () => {
             if (currentUser && currentUser instanceof Promise) {
                 const result = await currentUser;
-
                 setUser(result);
             } else {
                 setUser(currentUser);
+                setFormData({
+                    'username': user.username,
+                    'email': user.email,
+                })
             }
         };
         resolveUser();
@@ -43,6 +49,10 @@ const EditProfile = () => {
             handleFileUpload(file);
         }
     }, [file]);
+
+    
+
+    console.log(user)
 
     const handleFileUpload = (file) => {
         const storage = getStorage(app);
@@ -57,6 +67,7 @@ const EditProfile = () => {
 
         }, (error) => {
             setFileUploadError(true);
+            toast.error('Error uploading file');
         }, () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
                 setFormData((prevFormData) => ({ ...prevFormData, avatar: downloadUrl }));
@@ -64,8 +75,88 @@ const EditProfile = () => {
         })
     }
 
+    const validateField = (name, value) => {
+        let error = '';
+
+        switch (name) {
+            case 'username':
+                error = value.trim().length === 0 ? 'Username is required' : '';
+                break;
+            case 'email':
+                if (value.trim().length === 0) {
+                    error = 'Email is required';
+                } else {
+                    // Regular expression for email validation
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(value)) {
+                        error = 'Invalid email format';
+                    }
+                }
+                break;
+            case 'password':
+                if (value.trim().length === 0) {
+                    error = 'Password is required';
+                } else if (value.length < 8) { // Minimum length for password
+                    error = 'Password must be at least 8 characters long';
+                }
+                break;
+            default:
+                break;
+        }
+
+        return error;
+    };
+
+    
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value,
+        });
+
+    };
+
+    const validateForm = () => {
+
+        console.log('yes')
+        console.log(formData)
+        let valid = true;
+        let errors = {};
+
+        if (formData.username.trim().length === 0) {
+            valid = false;
+            errors.username = 'Username is required';
+        }
+        if (formData.email.trim().length === 0) {
+            valid = false;
+            errors.email = 'Email is required';
+        }
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(formData.email)) {
+            valid = false;
+            errors.email = 'Enter a valid Email';
+        }
+        if (formData.password && (formData.password.length < 8 || formData.password.trim().length === 0)) {
+            valid = false;
+            errors.password = 'Enter a valid password! Minimum 8 characters';
+        }
+
+        console.log(errors, valid);
+
+
+        setFormError(errors);
+        return valid;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) {
+            return;
+        }
 
         try {
             dispatch(updateUserStart());
@@ -82,83 +173,128 @@ const EditProfile = () => {
             if (!res.ok) {
                 const errorData = await res.json();
                 dispatch(updateUserFailure(errorData.error));
+                toast.error(errorData.error);
                 return;
             }
 
             const data = await res.json();
 
             if (data.sucess === false) {
-
                 dispatch(updateUserFailure(data.error));
+                toast.error(data.error);
                 return;
             }
 
             dispatch(updateUserSucess(data));
             setupdateSucess(true);
+            toast.success('Profile updated successfully');
 
         } catch (error) {
             dispatch(updateUserFailure(error));
-
+            toast.error('An error occurred while updating the profile');
         }
-
-
     }
 
-    const handleDelete = async () => {
-        setDeleting(true);
-        try {
-            dispatch(deleteUserStart());
-
-            const res = await fetch(`/api/deleteUser/${user._id}`, {
-                method: 'DELETE',
-            });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                dispatch(deleteUserFailure(errorData.error));
-                return;
-            }
-
-            const data = await res.json();
-
-            if (data.success === false) {
-                dispatch(deleteUserFailure(data.error));
-                return;
-            }
-
-            dispatch(deleteUserSucess());
-            navigate('/');
-
-        } catch (error) {
-            dispatch(deleteUserFailure(error));
-        } finally {
-            setDeleting(false);
-            setShowModal(false);
-        }
-    };
-
-
-
-    console.log(formData)
-
     return (
-
         <>
-            <div className='p-3 max-w-lg mx-auto'>
-                <h1 className='text-3xl font-semibold my-7 text-center'>Edit Profile</h1>
+            <div className='p-4 max-w-lg mx-auto bg-white shadow-lg rounded-lg mt-3 card1'>
+                <h1 className='text-3xl font-semibold my-7 text-center text-black'>Profile</h1>
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                     <input type="file" name="" id="" hidden ref={fileRef} accept='image/*' onChange={(e) => setFile(e.target.files[0])} />
-                    <img onClick={() => fileRef.current.click()} src={formData.avatar || (user ? user.avatar : '')} alt="" className='rounded-full h-24 w-24 object-cover cursor-pointer self-center m-2' />
-                    <p className='text-sm self-center'>{fileUploadError ? <span className='text-red-500'>Error Uploading File</span> : fileProgress > 0 && fileProgress < 100 ? (<span className='text-slate-500'>{`Uploading ${fileProgress}%`}</span>) : fileProgress === 100 ? (<span className='text-green-600'>File Uploaded Sucessfully</span>) : ""}</p>
-                    <input type="text" className='border p-3 rounded-lg' placeholder='Username' id='username' defaultValue={user && user.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} />
-                    <input type="email" className='border p-3 rounded-lg' placeholder='Email' id='email' defaultValue={user && user.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-                    <input type="password" className='border p-3 rounded-lg' placeholder='Password' id='password' onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                    <img onClick={() => fileRef.current.click()} src={formData.avatar || (user ? user.avatar : '')} alt="" className='rounded-full h-24 w-24 object-cover cursor-pointer self-center border-2 border-gray-300' />
+                    <p className='text-sm self-center text-black'>{fileUploadError ? <span className='text-red-500'>Error Uploading File</span> : fileProgress > 0 && fileProgress < 100 ? (<span className='text-slate-500'>{`Uploading ${fileProgress}%`}</span>) : fileProgress === 100 ? (<span className='text-green-600'>File Uploaded Successfully</span>) : ""}</p>
+                    <input
+                        type="text"
+                        className={`p-3 rounded-lg focus:outline-none focus:ring-1 ${formError.username
+                            ? 'focus:ring-red-500' // Red ring on error
+                            : formError.username === ''
+                                ? 'focus:ring-green-500' // Green ring on success
+                                : 'focus:ring-gray-500' // Gray ring for default (no error or success)
+                            }`}
+                        placeholder="Username"
+                        id="username"
+                        name="username"
+                        defaultValue={user ? user.username : ''}
+                        onChange={handleChange}
+                        style={{
+                            border: formError.username
+                                ? '1px solid red' // Red border on error
+                                : formError.username === ''
+                                    ? '1px solid #0dd50d' // Green border on success
+                                    : '1px solid rgb(144 136 136)' // Black border for default (no error or success)
+                        }}
+                    />
+                    {formError.username && (
+                        <div className="text-red-500 text-sm flex items-center err">
+                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                            <p className="m-0">{formError.username}</p>
+                        </div>
+                    )}
+
+
+                    {/* Email Input Field */}
+                    <input
+                        type="email"
+                        className={`p-3 rounded-lg focus:outline-none focus:ring-1 ${formError.email
+                            ? 'focus:ring-red-500' // Red ring on error
+                            : formError.email === ''
+                                ? 'focus:ring-green-500' // Green ring on success
+                                : 'focus:ring-gray-500' // Gray ring for default (no error or success)
+                            }`}
+                        placeholder="Email"
+                        id="email"
+                        name="email"
+                        defaultValue={user ? user.email : ''}
+                        onChange={handleChange}
+                        style={{
+                            border: formError.email
+                                ? '1px solid red' // Red border on error
+                                : formError.email === ''
+                                    ? '1px solid #0dd50d' // Green border on success
+                                    : '1px solid rgb(144 136 136)' // Black border for default (no error or success)
+                        }}
+                    />
+                    {formError.email && (
+                        <div className="text-red-500 text-sm flex items-center err">
+                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                            <p className="text-red-500 text-sm m-0">{formError.email}</p>
+                        </div>
+                    )}
+
+                    {/* Password Input Field */}
+                    <input
+                        type="password"
+                        className={`p-3 rounded-lg focus:outline-none focus:ring-1 ${formError.password
+                            ? 'focus:ring-red-500' // Red ring on error
+                            : formError.password === ''
+                                ? 'focus:ring-green-500' // Green ring on success
+                                : 'focus:ring-gray-500' // Gray ring for default (no error or success)
+                            }`}
+                        placeholder="Password"
+                        id="password"
+                        name="password"
+
+                        onChange={handleChange}
+                        style={{
+                            border: formError.password
+                                ? '1px solid red' // Red border on error
+                                : formError.password === ''
+                                    ? '1px solid #0dd50d' // Green border on success
+                                    : '1px solid rgb(144 136 136)' // Black border for default (no error or success)
+                        }}
+                    />
+                    {formError.password && (
+                        <div className="text-red-500 text-sm flex items-center err">
+                            <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+                            <p className="text-red-500 text-sm m-0">{formError.password}</p>
+                        </div>
+                    )}
 
                     <button
                         disabled={loading}
                         onClick={handleSubmit}
                         type="submit"
-                        className="block w-full px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-slate-700 rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600"
+                        className="block w-full px-6 py-2 mb-4 leading-5 text-white transition-colors duration-200 transform bg-custom-blue rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600"
                     >
                         {loading ? (
                             <span>
@@ -166,45 +302,13 @@ const EditProfile = () => {
                             </span>
                         ) : (
                             <span>
-                                <FaEdit className="inline-block mr-2" /> Update
+                                <FaEdit className="inline-block mb-1" /> Update
                             </span>
                         )}
                     </button>
-
-
-                    <button
-                        onClick={() => setShowModal(true)}
-                        className="flex items-center justify-center gap-2 flex-1 rounded-lg border-2 bg-red-600 text-white px-4 py-2"
-                        disabled={loading}
-                    >
-                        <FaTrash className="text-xl" />
-                        {loading ? 'Deleting.....' : 'Delete Profile'}
-                    </button>
-
-
-                    {error && <p className='text-red-500'>{error}</p>}
-                    {updateSucess && <p className='text-green-500'>Profile Updated Sucessfully</p>}
-
                 </form>
             </div>
-
-            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Confirm Deletion</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <p>Are you sure you want to delete your profile? This action cannot be undone.</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Cancel
-                    </Button>
-                    <Button variant="danger" onClick={handleDelete} disabled={deleting}>
-                        {deleting ? 'Deleting...' : 'Delete'}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
+            <ToastContainer />
         </>
     )
 }

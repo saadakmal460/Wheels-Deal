@@ -155,58 +155,88 @@ const SignUp = () => {
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <input
             type="text"
-            className={`p-3 rounded-lg focus:outline-none focus:ring-1 ${formError.username ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+            className={`p-3 rounded-lg focus:outline-none focus:ring-1 ${formError.username
+              ? 'focus:ring-red-500' // Red ring on error
+              : formError.username === ''
+                ? 'focus:ring-green-500' // Green ring on success
+                : 'focus:ring-gray-500' // Gray ring for default (no error or success)
               }`}
             placeholder="Username"
             id="username"
-            name='username'
+            name="username"
             onChange={handleChange}
             style={{
-              border: formError.username ? '1px solid red' : formError.username === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+              border: formError.username
+                ? '1px solid red' // Red border on error
+                : formError.username === ''
+                  ? '1px solid #0dd50d' // Green border on success
+                  : '1px solid rgb(144 136 136)' // Black border for default (no error or success)
             }}
           />
           {formError.username && (
-            <div className="text-red-500 text-sm flex items-center message">
-              <FaExclamationCircle className="mr-2" />
-              <p className="text-red-500 text-sm">{formError.username}</p>
+            <div className="text-red-500 text-sm flex items-center err">
+              <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+              <p className="m-0">{formError.username}</p>
             </div>
           )}
+
+
+          {/* Email Input Field */}
           <input
             type="email"
-            className={`p-3 rounded-lg focus:outline-none focus:ring-1 ${formError.email ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+            className={`p-3 rounded-lg focus:outline-none focus:ring-1 ${formError.email
+              ? 'focus:ring-red-500' // Red ring on error
+              : formError.email === ''
+                ? 'focus:ring-green-500' // Green ring on success
+                : 'focus:ring-gray-500' // Gray ring for default (no error or success)
               }`}
             placeholder="Email"
             id="email"
-            name='email'
+            name="email"
             onChange={handleChange}
             style={{
-              border: formError.email ? '1px solid red' : formError.email === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+              border: formError.email
+                ? '1px solid red' // Red border on error
+                : formError.email === ''
+                  ? '1px solid #0dd50d' // Green border on success
+                  : '1px solid rgb(144 136 136)' // Black border for default (no error or success)
             }}
           />
           {formError.email && (
-            <div className="text-red-500 text-sm flex items-center message">
-              <FaExclamationCircle className="mr-2" />
-              <p className="text-red-500 text-sm">{formError.email}</p>
+            <div className="text-red-500 text-sm flex items-center err">
+              <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+              <p className="text-red-500 text-sm m-0">{formError.email}</p>
             </div>
           )}
+
+          {/* Password Input Field */}
           <input
             type="password"
-            className={`p-3 rounded-lg focus:outline-none focus:ring-1 ${formError.password ? 'focus:ring-red-500' : 'focus:ring-custom-blue'
+            className={`p-3 rounded-lg focus:outline-none focus:ring-1 ${formError.password
+              ? 'focus:ring-red-500' // Red ring on error
+              : formError.password === ''
+                ? 'focus:ring-green-500' // Green ring on success
+                : 'focus:ring-gray-500' // Gray ring for default (no error or success)
               }`}
             placeholder="Password"
             id="password"
-            name='password'
+            name="password"
             onChange={handleChange}
             style={{
-              border: formError.password ? '1px solid red' : formError.password === '' ? '1px solid #0dd50d' : '1px solid #1ca9c9'
+              border: formError.password
+                ? '1px solid red' // Red border on error
+                : formError.password === ''
+                  ? '1px solid #0dd50d' // Green border on success
+                  : '1px solid rgb(144 136 136)' // Black border for default (no error or success)
             }}
           />
           {formError.password && (
-            <div className="text-red-500 text-sm flex items-center message">
-              <FaExclamationCircle className="mr-2" />
-              <p className="text-red-500 text-sm">{formError.password}</p>
+            <div className="text-red-500 text-sm flex items-center err">
+              <FaExclamationCircle style={{ fontSize: '1rem' }} className="mr-2" />
+              <p className="text-red-500 text-sm m-0">{formError.password}</p>
             </div>
           )}
+
 
           <button
             className="bg-custom-blue text-white rounded-lg uppercase p-3 mt-4 flex justify-center items-center hover:bg-blue-hover disabled:bg-blue-300 transition-colors duration-300 ease-in-out"

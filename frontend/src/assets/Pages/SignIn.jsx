@@ -74,17 +74,23 @@ const SignIn = () => {
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <input
             type="email"
-            className="border p-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-custom-blue"
+            className="p-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500"
             placeholder="Email"
             id="email"
             onChange={handleChange}
+            style={{
+              border: '1px solid rgb(144 136 136)' // Black border for default (no error or success)
+            }}
           />
           <input
             type="password"
-            className="border p-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-custom-blue"
+            className="p-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500"
             placeholder="Password"
             id="password"
             onChange={handleChange}
+            style={{
+              border: '1px solid rgb(144 136 136)' // Black border for default (no error or success)
+            }}
           />
 
           <button

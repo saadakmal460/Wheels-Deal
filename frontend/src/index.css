@@ -8,10 +8,6 @@ body {
   background-color: #fff;
 }
 
-.navContainer {
-  background-color: #d6dcdc;
-}
-
 .search {
   background-color: rgb(241, 245, 241);
 }
@@ -110,7 +106,7 @@ body {
 }
 
 .card1 {
-  border: 1px solid #1ca9c9;
+  border: 1px solid rgb(201, 196, 196);
 }
 
 .iconButton{
@@ -200,3 +196,31 @@ body {
   text-decoration: none;
 }
 
+.custom-button {
+  background-color: white;
+  color: black;
+  border: 1px solid BLACK;
+  border-radius: 0.375rem; /* Adjust as needed */
+  padding: 0.75rem 1.25rem; /* Adjust padding to match Tailwind classes */
+  font-size: 1rem; /* Adjust font size to match Tailwind classes */
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.custom-button:hover {
+  background-color: #f0f0f0 !important; /* Change background color on hover */
+  color: black !important; /* Change text color on hover */
+  border-color: black !important; /* Change border color on hover */
+  cursor: pointer !important; /* Optional: Change cursor to pointer on hover */
+}
+
+.thumb.selected{
+  height: 50px!important;
+  width: 50px!important;
+
+}
+
+
+.err{
+  margin-top: -18px;
+}

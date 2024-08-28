@@ -15,12 +15,9 @@ const UserIndiviualListing = () => {
     const [error, setError] = useState(null);
     const [toastShown, setToastShown] = useState(false);
     const location = useLocation();
-    const location2 = useLocation();
 
-
-    var available = location.state?.isTrue;
-    var message = location2.state?.message;
-
+    const available = location.state?.isTrue;
+    const message = location.state?.message;
 
     useEffect(() => {
         const fetchListing = async () => {
@@ -35,6 +32,7 @@ const UserIndiviualListing = () => {
                     setListing(null);
                 } else {
                     setListing(data);
+                    console.log(data)
                 }
             } catch (err) {
                 setError('An error occurred while fetching data.');
@@ -73,54 +71,67 @@ const UserIndiviualListing = () => {
         }
     }, [available, toastShown, location.state]);
 
-
-
     if (loading) return <Loader />;
     if (error) return <p className="text-center text-red-500">{error}</p>;
     if (!listing) return <p className="text-center text-gray-500">No listing available.</p>;
 
+    const { make, model, mileage, price, previousPrice, condition, fuelType, transmission, sellerContact, sellerAddress, description, imageUrls } = listing[0];
+    
+
     return (
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-            <ToastContainer />
-            <div className="bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
-                <Carousel showArrows={true} infiniteLoop={true} showThumbs={false} className="mb-6">
-                    {listing[0].imageUrls.map((url, index) => (
-                        <div key={index} className="relative">
-                            <img src={url} alt={`Image ${index + 1}`} className="w-full h-64 object-cover rounded-lg" />
-                        </div>
-                    ))}
-                </Carousel>
-                <div className="p-6">
-                    <h2 className="text-3xl font-bold mb-4">{listing[0].make} {listing[0].model}</h2>
-                    <div className="mb-4 space-y-2">
-                        <div className="text-lg font-medium text-gray-800 flex items-center">
-                            <FaTachometerAlt className="mr-2 text-gray-700" /> Mileage: {listing[0].mileage.toLocaleString()} KM
-                        </div>
-                        <div className="text-lg font-medium text-gray-800 flex items-center">
-                            <FaDollarSign className="mr-2 text-gray-700" /> Price: {formatPrice(listing[0].price)} Rs
-                        </div>
-                        <div className="text-lg font-medium text-gray-800 flex items-center">
-                            <FaCar className="mr-2 text-gray-700" /> Condition: {listing[0].condition}
-                        </div>
-                        <div className="text-lg font-medium text-gray-800 flex items-center">
-                            <MdLocalGasStation className="mr-2 text-gray-700" /> Fuel: {listing[0].fuelType}
-                        </div>
-                        <div className="text-lg font-medium text-gray-800 flex items-center">
-                            <FaCog className="mr-2 text-gray-700" /> Transmission: {listing[0].transmission}
-                        </div>
-                        <div className="text-lg font-medium text-gray-800 flex items-center">
-                            <FaPhoneAlt className="mr-2 text-gray-700" /> Seller Contact: {listing[0].sellerContact}
-                        </div>
-                        <div className="text-lg font-medium text-gray-800 flex items-center">
-                            <FaMapMarkerAlt className="mr-2 text-gray-700" /> Seller Address: {listing[0].sellerAddress}
-                        </div>
-                    </div>
-                    <p className="text-lg text-gray-700">
-                        <span className="font-semibold">Description:</span> {listing[0].description}
+        <section className="container mx-auto px-4 py-8 max-w-5xl bg-white text-black border rounded-lg mt-5">
+            {/* Image Gallery */}
+            <div className="lg:flex">
+                <div className="lg:w-1/2 lg:pr-8">
+                    <Carousel
+                        showArrows={true}
+                        infiniteLoop={true}
+                        showThumbs={false}
+                        className="mb-6"
+                    >
+                        {imageUrls.map((image, index) => (
+                            <div key={index} className="relative">
+                                <img
+                                    src={image}
+                                    alt={`Image ${index + 1}`}
+                                    className="w-full h-96 object-cover rounded-lg shadow-lg"
+                                />
+                            </div>
+                        ))}
+                    </Carousel>
+                </div>
+                {/* Product Details */}
+                <div className="lg:w-1/2 lg:pl-8 mt-8 lg:mt-0">
+                    <h2 className="text-3xl font-bold mb-4">{make} {model}</h2>
+                    <p className="font-bold mb-2">
+                        Price: <span className="text-2xl text-gray-800">{formatPrice(price)} <span className="text-xs line-through">{formatPrice(previousPrice)}</span></span>
                     </p>
+                    <p className="mb-4">{description}</p>
+                    <div className="flex items-center mb-4">
+                        <FaTachometerAlt className="mr-2" /> <span>Mileage: {mileage.toLocaleString()} KM</span>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <FaDollarSign className="mr-2" /> <span>Price: {formatPrice(price)}</span>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <FaCar className="mr-2" /> <span className='capitalize'>Condition: {condition}</span>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <MdLocalGasStation className="mr-2" /> <span className='capitalize'>Fuel: {fuelType}</span>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <FaCog className="mr-2" /> <span className='capitalize'>Transmission: {transmission}</span>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <FaPhoneAlt className="mr-2" /> <span>Seller Contact: {sellerContact}</span>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <FaMapMarkerAlt className="mr-2" /> <span className='capitalize'>Seller Address: {sellerAddress}</span>
+                    </div>
                 </div>
             </div>
-        </div>
+            <ToastContainer />
+        </section>
     );
 };
 
