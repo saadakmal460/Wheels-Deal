@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../Components/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaBoxOpen } from 'react-icons/fa';
 
 const ShowListings = () => {
     const [listings, setListings] = useState([]);
@@ -136,7 +137,13 @@ const ShowListings = () => {
                     </div>
                 </div>
             ) : (
-                <p className="text-center text-gray-500">No listings available.</p>
+                <div className="flex flex-col items-center justify-center bg-white p-8 text-center mb-3">
+                    <FaBoxOpen size={70} className="mb-4 text-blue-500" />
+                    <h2 className="text-2xl font-semibold text-gray-700">No Ads Posted</h2>
+                    <p className="mt-2 text-gray-500">
+                        You haven't posted any Ad.
+                    </p>
+                </div>
             )}
         </>
     );

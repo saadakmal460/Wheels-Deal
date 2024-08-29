@@ -8,7 +8,8 @@ import {
   FaGasPump,
   FaMapMarkerAlt,
   FaCalendarAlt,
-  FaTimesCircle
+  FaTimesCircle,
+  FaBoxOpen
 } from 'react-icons/fa';
 import Loader from '../Components/Loader'; // Assume you have a Loader component
 import { Link } from 'react-router-dom';
@@ -17,7 +18,7 @@ import { Slider } from '@mui/material';
 const Search = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 5000000000000]);
+  const [priceRange, setPriceRange] = useState([0, 50000000]);
   const [condition, setCondition] = useState('');
   const [transmission, setTransmission] = useState('');
   const [fuelType, setFuelType] = useState('');
@@ -33,8 +34,8 @@ const Search = () => {
   useEffect(() => {
     const filters = [];
     if (searchQuery) filters.push(`Search: ${searchQuery}`);
-    if (priceRange[0] !== 0 || priceRange[1] !== 5000000000000)
-      filters.push(`Price: $${priceRange[0].toLocaleString()} - $${priceRange[1].toLocaleString()}`);
+    if (priceRange[0] !== 0 || priceRange[1] !== 50000000)
+      filters.push(`Price: ${priceRange[0].toLocaleString()} PKR - ${priceRange[1].toLocaleString()} PKR`);
     if (condition) filters.push(`Condition: ${condition}`);
     if (transmission) filters.push(`Transmission: ${transmission}`);
     if (fuelType) filters.push(`Fuel Type: ${fuelType}`);
@@ -123,7 +124,7 @@ const Search = () => {
 
     // Update state based on the filter being removed
     if (filter.startsWith('Search:')) setSearchQuery('');
-    if (filter.startsWith('Price:')) setPriceRange([0, 5000000000000]);
+    if (filter.startsWith('Price:')) setPriceRange([0, 50000000]);
     if (filter.startsWith('Condition:')) setCondition('');
     if (filter.startsWith('Transmission:')) setTransmission('');
     if (filter.startsWith('Fuel Type:')) setFuelType('');
@@ -203,15 +204,15 @@ const Search = () => {
           <div className="mb-3">
             <label className="block text-gray-700 mb-2 flex items-center">
               <FaDollarSign className="mr-2 text-green-500" />
-              Price Range: ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}
+              Price Range: {priceRange[0].toLocaleString()} PKR - {priceRange[1].toLocaleString()} PKR
             </label>
             <Slider
               value={priceRange}
               onChange={handleChange}
               valueLabelDisplay="auto"
               min={0}
-              max={5000000}
-              step={1000}
+              max={50000000}
+              step={100000}
               aria-labelledby="price-range-slider"
               getAriaLabel={() => 'Price range'}
             />
@@ -308,12 +309,22 @@ const Search = () => {
       
       )}
 
-      {/* Loader */}
+      
       {loading && <Loader />}
       
       {/* Listings */}
       <div className="container mt-4">
             <h3>Results</h3>
+            {listings.length === 0 & !loading ? (
+                // Conditional rendering when there are no listings
+                <div className="flex flex-col items-center justify-center bg-white p-8 text-center mb-3">
+                    <FaBoxOpen size={70} className="mb-4 text-blue-500" />
+                    <h2 className="text-2xl font-semibold text-gray-700">No Vehicles Available</h2>
+                    <p className="mt-2 text-gray-500">
+                        It seems we don't have the vehicle you are looking for.
+                    </p>
+                </div>
+            ) : (
             <div className="row g-3 mb-3">
                 {listings.map((listing) => (
                     <div className="col-md-4" key={listing._id}>
@@ -375,6 +386,7 @@ const Search = () => {
                     </div>
                 ))}
             </div>
+          )}
 
         </div>
     </>

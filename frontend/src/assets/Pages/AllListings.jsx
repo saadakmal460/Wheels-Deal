@@ -93,7 +93,7 @@ const AllListings = () => {
                                     </div>
                                     <div className="d-flex align-items-center mb-2">
                                         <FaDollarSign className="me-2 icon-color-price" />
-                                        <p className="mb-0 capitalize">${listing.price.toLocaleString()}</p>
+                                        <p className="mb-0 capitalize">{listing.price.toLocaleString()} PKR</p>
                                     </div>
                                     <div className="d-flex mb-3">
                                         <div className="d-flex align-items-center me-3">

@@ -36,8 +36,8 @@ const EditProfile = () => {
             } else {
                 setUser(currentUser);
                 setFormData({
-                    'username': user.username,
-                    'email': user.email,
+                    'username': currentUser.username,
+                    'email': currentUser.email,
                 })
             }
         };
@@ -52,7 +52,7 @@ const EditProfile = () => {
 
     
 
-    console.log(user)
+    console.log('Form data' , formData)
 
     const handleFileUpload = (file) => {
         const storage = getStorage(app);
@@ -123,7 +123,6 @@ const EditProfile = () => {
     const validateForm = () => {
 
         console.log('yes')
-        console.log(formData)
         let valid = true;
         let errors = {};
 
@@ -197,7 +196,7 @@ const EditProfile = () => {
 
     return (
         <>
-            <div className='p-4 max-w-lg mx-auto bg-white shadow-lg rounded-lg mt-3 card1'>
+            <div className='p-4 max-w-lg mx-auto bg-white shadow-lg rounded-lg mt-4 card1 mb-5'>
                 <h1 className='text-3xl font-semibold my-7 text-center text-black'>Profile</h1>
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                     <input type="file" name="" id="" hidden ref={fileRef} accept='image/*' onChange={(e) => setFile(e.target.files[0])} />
@@ -294,7 +293,7 @@ const EditProfile = () => {
                         disabled={loading}
                         onClick={handleSubmit}
                         type="submit"
-                        className="block w-full px-6 py-2 mb-4 leading-5 text-white transition-colors duration-200 transform bg-custom-blue rounded-md hover:opacity-90 disabled:opacity-80 focus:outline-none focus:bg-gray-600"
+                        className="block w-full px-6 py-2 mb-4 leading-5 text-white transition-colors duration-200 transform bg-custom-blue rounded-md hover:bg-blue-hover disabled:opacity-80 focus:outline-none"
                     >
                         {loading ? (
                             <span>

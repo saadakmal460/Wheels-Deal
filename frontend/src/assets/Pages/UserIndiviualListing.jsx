@@ -79,7 +79,7 @@ const UserIndiviualListing = () => {
     
 
     return (
-        <section className="container mx-auto px-4 py-8 max-w-5xl bg-white text-black border rounded-lg mt-5">
+        <section className="container mx-auto px-4 py-8 max-w-5xl bg-white text-black border rounded-lg mt-5 mb-5">
             {/* Image Gallery */}
             <div className="lg:flex">
                 <div className="lg:w-1/2 lg:pr-8">
@@ -104,7 +104,7 @@ const UserIndiviualListing = () => {
                 <div className="lg:w-1/2 lg:pl-8 mt-8 lg:mt-0">
                     <h2 className="text-3xl font-bold mb-4">{make} {model}</h2>
                     <p className="font-bold mb-2">
-                        Price: <span className="text-2xl text-gray-800">{formatPrice(price)} <span className="text-xs line-through">{formatPrice(previousPrice)}</span></span>
+                        Price: <span className="text-2xl text-gray-800">{formatPrice(price)} <span className="text-xs line-through">{formatPrice(previousPrice)}</span>Rs</span>
                     </p>
                     <p className="mb-4">{description}</p>
                     <div className="flex items-center mb-4">

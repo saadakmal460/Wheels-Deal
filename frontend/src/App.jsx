@@ -4,7 +4,6 @@ import Home from './assets/Pages/Home'
 import SignIn from './assets/Pages/SignIn'
 import SignUp from './assets/Pages/SignUp'
 import Profile from './assets/Pages/Profile'
-import About from './assets/Pages/About'
 import Navbar1 from './assets/Components/Navbar';
 import PrivateRoute from './assets/Components/PrivateRoute';
 import EditProfile from './assets/Pages/EditProfile';
@@ -14,6 +13,7 @@ import UserIndiviualListing from './assets/Pages/UserIndiviualListing';
 import EditListing from './assets/Pages/EditListing';
 import Search from './assets/Pages/Search';
 import SideBar from './assets/Components/SideBar';
+import Footer from './assets/Components/Footer';
 
 
 
@@ -41,8 +41,9 @@ const App = () => {
 
         <Route path='/signIn' element={<SignIn />} />
         <Route path='/signUp' element={<SignUp />} />
-        <Route path='/about' element={<About />} />
       </Routes>
+
+      <Footer/>
 
     </BrowserRouter>
   )
