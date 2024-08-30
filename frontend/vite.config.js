@@ -5,10 +5,6 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   
   plugins: [react()],
-
-  build: {
-    outDir: 'dist', // This should be 'dist'
-  },
   server:{
     proxy:{
       '/api':{

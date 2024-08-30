@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const router = require('./Routes/Router');
 const { Logger } = require('./Middleware/logger');
-const path = require('path');
+
 
 dotenv.config();
 
@@ -17,11 +17,9 @@ app.use(cors());
 
 app.use('/api', router);
 app.use(Logger);
-app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
-});
+
+
 
 mongoose.connect(process.env.MONGO)
   .then(() => {
