@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 exports.verifyUser = (req,res,next)=>{
 
     const tokken = req.cookies.acess_tokken;
-
+    
+    console.log(tokken)
     if(!tokken){
         return next(customError(401 , 'Actions Unauthorized'));
     } 

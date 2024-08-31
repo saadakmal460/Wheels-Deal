@@ -66,14 +66,6 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.getListing = async (req, res, next) => {
     
-    if (!req.user) {
-        return next(customError(401, 'Unauthorized'));
-    }
-
-    if (req.params.id !== req.user.id) {
-        return next(customError(403, 'Action not allowed'));
-    }
-
     try {
         // Find listings by user reference ID
         const listings = await listingModel.find({ userRef: req.params.id });
